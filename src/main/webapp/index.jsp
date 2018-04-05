@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert Tournament</title>
+<title>Salesforce Metadata with Heroku</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0,user-scalable=no" />
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons"
@@ -21,8 +21,9 @@
 <link type="text/css" rel="stylesheet"
 	href="materialize/css/materialize.min.css" media="screen,projection" />
 <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-
-</head>
+ <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js">
+</script>
+ </head>
 <body>
 	<div class="container">
 		<h4>Salesforce Metadata Web Application!</h4>
@@ -256,6 +257,7 @@
 			</div>
 		</div>
 		<button onclick="senddata();">Send data</button>
+		<button id="getdatabutton" onclick="getfinaldata();" disabled>Fetch Data</button>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(
@@ -328,7 +330,10 @@
 				},
 				complete : function(xhr, status) {
 					if (status == "success")
-						callmeatdata(userid,sdate,edate,metaobj,logintoken);
+						{
+							callmeatdata(userid,sdate,edate,metaobj,logintoken);
+							$("#getdatabutton").prop('disabled', false);
+						}
 				},
 				success : function(result, status, xhr) {
 					alert("db entry response - " + result + " status - " + status);
@@ -357,7 +362,38 @@
 				},
 				complete : function(xhr, status) {
 					if (status == "success")
-						alert("metadata response - " + xhr + " status - " + status);
+						alert("metadata response status - " + status);
+				},
+				success : function(result, status, xhr) {
+					//alert("metadata response - " + result + " status - " + status);
+
+				}
+			});
+
+		}
+		
+		function getfinaldata() {
+			var userid = document.getElementById("sfdcuserid").value;
+			$.ajax({
+				method : "GET",
+				url : "metadataresources/herokuDB/getfinaldata/",
+
+				data : ({
+					sfdcuserid : userid,
+				}),
+
+				async : true,
+				cache : true,
+				beforeSend : function() {
+
+				},
+				complete : function(xhr, status) {
+					if (status == "success")
+						{
+							alert("metadata response - " + xhr.responseText + " status - " + status);
+							var blob = new Blob([xhr.responseText],{type:"application/xml;charset=utf-8"});
+							saveAs(blob,"metadata.xml");
+						}
 				},
 				success : function(result, status, xhr) {
 					//alert("metadata response - " + result + " status - " + status);

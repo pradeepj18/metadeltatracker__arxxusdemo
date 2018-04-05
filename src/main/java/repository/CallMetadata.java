@@ -168,7 +168,7 @@ public class CallMetadata {
 			//ResponseBuilder response = Response.ok((Object) file);
 			//response.header("Content-Disposition", "attachment;filename=" + file.getName());
 			//return response.build();
-			return Response.status(200).entity("Metadata process complete").build();
+			return Response.status(200).entity("Metadata process complete").build();	
 		} else {
 			System.out.println("file null");
 			PsqlDataHouse.delteDBEntry(sfdcusername);
