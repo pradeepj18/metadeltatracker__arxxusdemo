@@ -12,7 +12,7 @@ public class PsqlDataHouse {
 	public static int setUserKeytoDB(String sfdcusername,String datetime)
 	{
 		try {
-			DBManager.loadDriverTest();
+			DBManager.loadDriver();
 			int row = DBManager.CreUpDel("insert into sfdcmetadata(datakey,entrydate,status) values('"+sfdcusername+"','"+datetime+"','false')");
 			if(row>0)
 				return row;
@@ -26,7 +26,7 @@ public class PsqlDataHouse {
 	public static int setMetadataObjtoDB(String sfdcusername,JSONObject jsonobject)
 	{
 		try {
-			DBManager.loadDriverTest();
+			DBManager.loadDriver();
 			int row = DBManager.CreUpDel("update sfdcmetadata set metadata ='"+jsonobject+"',status='true' where datakey='"+sfdcusername+"'");
 			if(row>0)
 				return row;
@@ -39,7 +39,7 @@ public class PsqlDataHouse {
 	public static int delteDBEntry(String sfdcusername)
 	{
 		try {
-			DBManager.loadDriverTest();
+			DBManager.loadDriver();
 			int row = DBManager.CreUpDel("delete from sfdcmetadata where datakey='"+sfdcusername+"'");
 			if(row>0)
 				return row;
