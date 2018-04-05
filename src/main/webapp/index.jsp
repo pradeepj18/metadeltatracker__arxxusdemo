@@ -295,7 +295,7 @@
 			$('select').formSelect();
 		});
 	</script>
-	<a href="herokudbtest.jsp">click here to check with database</a>
+
 	<br>
 	<br>
 	<script type="text/javascript">
@@ -382,7 +382,7 @@
 					sfdcuserid : userid,
 				}),
 
-				async : true,
+				async : false,
 				cache : true,
 				beforeSend : function() {
 
@@ -390,7 +390,7 @@
 				complete : function(xhr, status) {
 					if (status == "success")
 						{
-							alert("metadata response - " + xhr.responseText + " status - " + status);
+						//	alert("metadata response - " + xhr.responseText + " status - " + status);
 							var blob = new Blob([xhr.responseText],{type:"application/xml;charset=utf-8"});
 							saveAs(blob,"metadata.xml");
 						}
