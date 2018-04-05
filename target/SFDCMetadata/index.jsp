@@ -357,10 +357,10 @@
 				},
 				complete : function(xhr, status) {
 					if (status == "success")
-						callmeatdata(result);
+						alert("metadata response - " + xhr + " status - " + status);
 				},
 				success : function(result, status, xhr) {
-					alert("metadata response - " + result + " status - " + status);
+					//alert("metadata response - " + result + " status - " + status);
 
 				}
 			});
