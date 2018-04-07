@@ -375,7 +375,7 @@
 						},
 						complete : function(xhr, status) {
 							if (parseInt(xhr.responseText) === 200) {
-								temptimeout = setInterval(function(){getfinaldata(userid)},5000);
+								temptimeout = setInterval(function(){getfinaldata(userid)},10000);
 								callmeatdata(userid, sdate, edate, metaobj,logintoken);
 							} else if (parseInt(xhr.responseText) === 422) { // remove it after testing
 								document.getElementById("loader").style.display = "none";
