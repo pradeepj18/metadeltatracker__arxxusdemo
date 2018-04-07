@@ -38,7 +38,7 @@ public class ToolingQueryList {
 						+ "+where+LastModifiedDate%3E" + enddate + "+and+LastModifiedById%3D'" + SFDCUserID
 						+ "'+order+by+DeveloperName+asc";
 			} else {
-
+                
 				return "select+Id,DeveloperName,CreatedById,CreatedDate,LastModifiedDate+from+" + objectName
 						+ "+where+LastModifiedDate%3E" + startdate + "+and+LastModifiedDate%3C" + enddate
 						+ "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+DeveloperName+asc";
@@ -169,6 +169,7 @@ public class ToolingQueryList {
 						+ startdate + "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+Name+asc";
 
 			} else if (startdate.equalsIgnoreCase("") || startdate == null) {
+				System.out.println("start date null query printed");
 				return "select+Id,Name,CreatedById,LastModifiedDate+from+" + objectName + "+where+LastModifiedDate%3E"
 						+ enddate + "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+Name+asc";
 			} else {
@@ -768,6 +769,53 @@ public class ToolingQueryList {
 			}
 		}
 	}
+	
+	public static String getFlexiPage(String objectName, String startdate, String enddate, String SFDCUserID) {
+
+		if (SFDCUserID.equalsIgnoreCase("") || SFDCUserID == null) {
+			if ((startdate.equalsIgnoreCase("") || startdate == null)
+					&& (enddate.equalsIgnoreCase("") || enddate == null)) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+order+by+DeveloperName+asc";
+
+			} else if (enddate.equalsIgnoreCase("") || enddate == null) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + startdate + "+order+by+DeveloperName+asc";
+
+			} else if (startdate.equalsIgnoreCase("") || startdate == null) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + enddate + "+order+by+DeveloperName+asc";
+			} else {
+
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + startdate + "+and+LastModifiedDate%3C" + enddate
+						+ "+order+by+DeveloperName+asc";
+			}
+		} else {
+			if ((startdate.equalsIgnoreCase("") || startdate == null)
+					&& (enddate.equalsIgnoreCase("") || enddate == null)) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedById%3D'" + SFDCUserID + "'+order+by+DeveloperName+asc";
+
+			} else if (enddate.equalsIgnoreCase("") || enddate == null) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + startdate + "+and+LastModifiedById%3D'" + SFDCUserID
+						+ "'+order+by+DeveloperName+asc";
+
+			} else if (startdate.equalsIgnoreCase("") || startdate == null) {
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + enddate + "+and+LastModifiedById%3D'" + SFDCUserID
+						+ "'+order+by+DeveloperName+asc";
+			} else {
+                
+				return "select+Id,DeveloperName,CreatedDate,LastModifiedDate+from+" + objectName
+						+ "+where+LastModifiedDate%3E" + startdate + "+and+LastModifiedDate%3C" + enddate
+						+ "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+DeveloperName+asc";
+			}
+
+		}
+	}
+
 
 	public static String getFullnameQuery(String ToolingSobjectName, String ID) {
 		String query = "select FullName from " + ToolingSobjectName + " where Id='" + ID + "'";
@@ -775,12 +823,11 @@ public class ToolingQueryList {
 		return query;
 
 	}
-	public static String getUserCred()
+public static String getUserCred()
 	{
 		return "select+Id,Name,Username,CreatedById,LastModifiedDate+from+User+order+by+Name+asc";
 
 	}
-
 	// -------------------------monty end-----------------------------
 
 }

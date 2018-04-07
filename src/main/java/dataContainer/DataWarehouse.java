@@ -555,7 +555,7 @@ public class DataWarehouse {
 	public static JSONArray getFlexiPageList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId) {
 		// List<String> customObjectList = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String ObjectRestURL = ToolingQueryList.getDeveloperNameQuery("FlexiPage",startdate, enddate,sfdcUserId);
+		String ObjectRestURL = ToolingQueryList.getFlexiPage("FlexiPage",startdate, enddate,sfdcUserId);
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		String instanceURL = loginObject.getString("instance_url");
@@ -863,8 +863,8 @@ public class DataWarehouse {
 			throws UnsupportedEncodingException {
 		// List<String> metadtalist = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getNameQuery("Profile",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getNameQuery("Profile",startdate, enddate,sfdcUserId);
+		//String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		// System.out.println("uri :"+uri);
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
@@ -898,11 +898,11 @@ public class DataWarehouse {
 	}
 
 	public static JSONArray getCustomApplicationList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId)
-			throws UnsupportedEncodingException {
+			{
 		// List<String> metadtalist = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getDeveloperNameQuery("CustomApplication",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getDeveloperNameQuery("CustomApplication",startdate, enddate,sfdcUserId);
+		//String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		// System.out.println("uri :"+uri);
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
@@ -1158,11 +1158,11 @@ public class DataWarehouse {
 	}
 
 	public static JSONArray getPermissionSetList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId)
-			throws UnsupportedEncodingException {
+			{
 		// List<String> metadtalist = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getNameQuery("PermissionSet",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getNameQuery("PermissionSet",startdate, enddate,sfdcUserId);
+		//String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		// System.out.println("uri :"+uri);
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
@@ -1196,10 +1196,10 @@ public class DataWarehouse {
 	}
 
 	public static JSONArray getConnectedApplicationList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId)
-			throws UnsupportedEncodingException {
+			{
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getNameQuery("ConnectedApplication",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getNameQuery("ConnectedApplication",startdate, enddate,sfdcUserId);
+		//String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		String instanceURL = loginObject.getString("instance_url");
@@ -1266,11 +1266,11 @@ public class DataWarehouse {
 	}
 
 	public static JSONArray getDashboardList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId)
-			throws UnsupportedEncodingException {
+			 {
 		// List<String> metadtalist = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getDeveloperNameQuery("Dashboard",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getDeveloperNameQuery("Dashboard",startdate, enddate,sfdcUserId);
+	//	String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		// System.out.println("uri :"+uri);
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
@@ -1289,13 +1289,15 @@ public class DataWarehouse {
 		httpget.addHeader(oauthHeader);
 		try {
 			response = httpClient.execute(httpget);
+			System.out.println("response "+response);
 			if (response.getStatusLine().getStatusCode() == 200) {
+				
 				String Result = EntityUtils.toString(response.getEntity());
 				JSONObject jsonObject = new JSONObject(Result);
 
 				jsonArray = jsonObject.getJSONArray("records");
 
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1304,11 +1306,11 @@ public class DataWarehouse {
 	}
 
 	public static JSONArray getReportList(JSONObject loginObject, String startdate, String enddate,String sfdcUserId)
-			throws UnsupportedEncodingException {
+			 {
 		// List<String> metadtalist = new ArrayList<String>();
 		JSONArray jsonArray = null;
-		String URL = ToolingQueryList.getDeveloperNameQuery("Report",startdate, enddate,sfdcUserId);
-		String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
+		String ObjectRestURL = ToolingQueryList.getDeveloperNameQuery("Report",startdate, enddate,sfdcUserId);
+		//String ObjectRestURL = URLEncoder.encode(URL, "UTF-8");
 		// System.out.println("uri :"+uri);
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
@@ -1341,7 +1343,7 @@ public class DataWarehouse {
 
 	}
 	// -------------------------monty end-----------------------------
-	public static JSONArray getUserCred(JSONObject loginObject) {
+public static JSONArray getUserCred(JSONObject loginObject) {
 		JSONArray jsonArray = null;
 		String ObjectRestURL = ToolingQueryList.getUserCred();
 		HttpClient httpClient = HttpClientBuilder.create().build();

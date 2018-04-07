@@ -22,12 +22,11 @@ public class DBManager {
 	public static Connection loadDriverTest() throws URISyntaxException, SQLException {
 		try {
 			Class.forName("org.postgresql.Driver");
+			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/metadata","postgres", "psql");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Exception in DBManager....for load driver.." + e);
 		}
-		con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/herokutest","postgres", "psql");
-		stmt=con.createStatement();
+		
 		return con;
     }
 
@@ -51,9 +50,20 @@ public class DBManager {
 		}
 
 		catch (Exception e) {
-			System.out.println("Exception in DBManager....for CreUpDel.." + e.getMessage());
+			System.out.println("Exception in DBManager....for CreUpDel.." + e);
 		}
 		return 0;
+	}
+	
+	public static void close() {
+		try {
+			stmt.close();
+			con.close();
+		}
+
+		catch (Exception e) {
+			System.out.println("Exception in DBManager....for CreUpDel.." + e.getMessage());
+		}
 	}
 
 }

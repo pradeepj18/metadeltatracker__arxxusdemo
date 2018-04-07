@@ -19,81 +19,87 @@ import credentials.DBManager;
 @Path("herokuDB")
 public class PsqlDataHouse {
 
-	public static int setUserKeytoDB(String sfdcusername,String datetime)
-	{
+	public static int setUserKeytoDB(String sfdcusername, String datetime) {
 		try {
 			DBManager.loadDriver();
-			int row = DBManager.CreUpDel("insert into sfdcmetadata(datakey,entrydate,status) values('"+sfdcusername+"','"+datetime+"','false')");
-			if(row>0)
+			int row = DBManager.CreUpDel("insert into sfdcmetadata(datakey,entrydate,status) values('" + sfdcusername
+					+ "','" + datetime + "','false')");
+			DBManager.close();
+			if (row > 0)
 				return row;
-			
+
 		} catch (URISyntaxException | SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
-	
-	public static int setMetadataObjtoDB(String sfdcusername,JSONObject jsonobject)
-	{
+
+	public static int setMetadataObjtoDB(String sfdcusername, JSONObject jsonobject) {
 		try {
 			DBManager.loadDriver();
-			int row = DBManager.CreUpDel("update sfdcmetadata set metadata ='"+jsonobject+"',status='true' where datakey='"+sfdcusername+"'");
-			if(row>0)
+		
+			int row = DBManager.CreUpDel("update sfdcmetadata set metadata ='" + jsonobject
+					+ "',status='true' where datakey='" + sfdcusername + "' and status='false'");
+			DBManager.close();
+			if (row > 0)
 				return row;
-			
+
 		} catch (URISyntaxException | SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
-	public static int delteDBEntry(String sfdcusername)
-	{
+
+	public static int delteDBEntry(String sfdcusername) {
+		try {
+			DBManager.loadDriver();
+			int row = DBManager.CreUpDel("delete from sfdcmetadata where datakey='" + sfdcusername + "' and status='false'");
+			DBManager.close();
+			if (row > 0)
+				return row;
+
+		} catch (URISyntaxException | SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	public static int delAlldata(String sfdcusername) {
 		try {
 			DBManager.loadDriver();
 			int row = DBManager.CreUpDel("delete from sfdcmetadata where datakey='"+sfdcusername+"'");
-			if(row>0)
+			DBManager.close();
+			if (row > 0)
 				return row;
-			
+
 		} catch (URISyntaxException | SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
+
 	
 	@GET
 	@Path("getfinaldata")
-	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public static Response getJsonobjectfromHerokuDB(@QueryParam("sfdcuserid") String sfdcuserid_usrname)
-	{
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public static Response getJsonobjectfromHerokuDB(@QueryParam("sfdcuserid") String sfdcuserid_usrname) {
 		String sfdcusername = sfdcuserid_usrname.split("##")[1];
-		
-		String msg="";
 		try {
 			DBManager.loadDriver();
-			ResultSet result =  DBManager.fetchQuery("select * from sfdcmetadata where datakey='"+sfdcusername+"' and status=true");
-			if(result.next())
-			{
+			ResultSet result = DBManager
+					.fetchQuery("select * from sfdcmetadata where datakey='" + sfdcusername + "' and status='true' order by entrydate desc");
+			if (result.next()) {
 				org.json.JSONObject jsonFileObject = new org.json.JSONObject(result.getString("metadata"));
-		       String xml = org.json.XML.toString(jsonFileObject);
-		        return Response.status(200).entity(xml).build();
-			}
-			else
-			{
-				
-				ResultSet error =  DBManager.fetchQuery("select * from sfdcmetadata where datakey='"+sfdcusername+"' and status=false");
-				if(error.next())
-				{
-					return Response.status(200).entity("Metadata not found in database").build();
-				}
-				
+				String xml = org.json.XML.toString(jsonFileObject);
+				DBManager.close();
+				return Response.status(200).entity(xml).build();
+			} else {
+				return Response.status(200).entity("204").build();
 			}
 			
 		} catch (URISyntaxException | SQLException e) {
 			e.printStackTrace();
-			msg=e.toString();
-			
 		}
-		return Response.status(200).entity("Something going wrong - "+msg).build();
+		return Response.status(200).entity("204").build();// Something going wrong
 	}
 }

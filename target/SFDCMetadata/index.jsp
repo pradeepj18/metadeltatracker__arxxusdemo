@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Salesforce Metadata with Heroku</title>
+<title>Salesforce Metadata</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0,user-scalable=no" />
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons"
@@ -21,21 +21,56 @@
 <link type="text/css" rel="stylesheet"
 	href="materialize/css/materialize.min.css" media="screen,projection" />
 <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
- <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js">
+<script
+	src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js">
+	
 </script>
- </head>
+
+<style>
+.my-pre-loader {
+	position: absolute;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	border: 8px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 6px solid #3498db;
+	border-bottom: 6px solid #3498db;
+	width: 40px;
+	height: 40px;
+	-webkit-animation: spin 3s linear infinite;
+	animation: spin 3s linear infinite;
+}
+
+ @-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  50% { -webkit-transform: rotate(180deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+} 
+#procmsg {
+	display: none;
+	margin-left: 5%;
+	font-size: 16px;
+	font-weight: 400;
+}
+</style>
+</head>
 <body>
-	<div class="container">
-		<h4>Salesforce Metadata Web Application!</h4>
+	<div class="container" id="noscript">
+		<h4>Salesforce Metadata Application!</h4>
 		<div class="row">
-			<div class="col s12 m6 l6">
-				<select class="browser-default" name="sfdcuserid" id="sfdcuserid">
-					<option value="" disabled selected>Select User</option>
+			<div class="input-field col s12 m6 l6" style=" margin-bottom: -30px;">
+				<select  name="sfdcuserid" id="sfdcuserid" required>
+				
 					<%
 						JSONObject loginObject = RestLogin.GetLoginObject();
 						JSONArray UserArray = DataWarehouse.getUserCred(loginObject);
 					%>
-					<option value="">--none--</option>
+					<option value="##info.mca">---All Users---</option>
 					<%
 						for (int i = 0; i < UserArray.length(); i++) {
 					%>
@@ -49,7 +84,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="input-field col s12 m12 l6">
+			<div class="input-field col s12 m12 l6" >
 				<label for="startdate">Start Date</label> <input id="startdate"
 					type="text" class="datepicker" name="startdate" required>
 			</div>
@@ -157,9 +192,14 @@
 						<span>Field Set</span>
 					</label>
 				</p>
-				<p>
+				<!-- <p>
 					<label> <input type="checkbox" name="metadata" value="118" />
 						<span>Flexi Page</span>
+					</label>
+				</p> -->
+				<p>
+					<label> <input type="checkbox" name="metadata" value="134" />
+						<span>Workflow Task</span>
 					</label>
 				</p>
 				<p>
@@ -249,58 +289,58 @@
 						<span>WorkflowRulle</span>
 					</label>
 				</p>
-				<p>
-					<label> <input type="checkbox" name="metadata" value="134" />
-						<span>Workflow Task</span>
-					</label>
-				</p>
+				
 			</div>
 		</div>
-		<button onclick="senddata();">Send data</button>
-		<button id="getdatabutton" onclick="getfinaldata();" disabled>Fetch Data</button>
+		<div class="row">
+			<button class="btn waves-effect red lighten-2"
+				onclick="senddata();" id="senddatabutton">
+				Fetch Metadata <i class="material-icons right">send</i>
+			</button>&nbsp;&nbsp;
+			<div style="display: none" class="my-pre-loader" id="loader"
+				title="Processing metadata"></div>
+				<div class="red-text" id="procmsg">Processing Metadata</div>
+			<!-- <button class="btn waves-effect waves-light teal right"
+				id="getdatabutton" onclick="getfinaldata();" disabled>Download
+				file</button> -->
+		</div>
 	</div>
 	<script type="text/javascript">
-		$(document).ready(
-				function() {
-
-					var yesterday = new Date((new Date()).valueOf() - 1000 * 60
-							* 60 * 24);
-
-					$("#startdate").click(function() {
-
-						$('.datepicker').pickadate({
-							format : 'yyyy-mm-dd',
-						/* disable : [ {
-							from : [ 0, 0, 0 ],
-							to : yesterday
-						} ] */
-						});
-					});
-
-					$("#enddate").click(
-							function() {
-								var afterday = new Date((new Date($(
-										"#tour_sdate").val())).valueOf()
-										- 1000 * 60 * 60 * 24);
-								$('.datepicker1').pickadate({
-									format : 'yyyy-mm-dd',
-								/* disable : [ {
-									from : [ 0, 0, 0 ],
-									to : afterday
-								} ] */
-								});
-							});
-				});
 		$(document).ready(function() {
-			$('select').formSelect();
+			$("#startdate").click(function() {
+				$('.datepicker').pickadate({
+					today: 'Today',
+				    clear: 'Clear',
+				    close: 'Ok',
+				    closeOnSelect: false,
+					format : 'yyyy-mm-dd',
+					max : new Date(),
+				});
+			//	$('.datepicker1').pickadate(clear);
+			});
+
+			$("#enddate").click(function() {
+				$('.datepicker1').pickadate({
+					today: 'Today',
+				    clear: 'Clear',
+				    close: 'Ok',
+				    closeOnSelect: false,
+					format : 'yyyy-mm-dd',
+					//min : new Date($("#startdate").val()),
+					max : new Date(),
+				});
+			});
+		});
+		$(document).ready(function() {
+		    $('select').material_select();
 		});
 	</script>
 
 	<br>
 	<br>
 	<script type="text/javascript">
-		
 		function senddata() {
+			window.temptimeout;
 			var userid = document.getElementById("sfdcuserid").value;
 			var sdate = document.getElementById("startdate").value;
 			var edate = document.getElementById("enddate").value;
@@ -309,98 +349,115 @@
 			$.each($("input[name='metadata']:checked"), function() {
 				metaobj.push($(this).val());
 			});
-			alert(userid+" "+sdate+" "+edate+" "+metaobj);
-			$.ajax({
-				method : "GET",
-				url : "metadataresources/sfdcmetadataPSQL/",
-
-				data : ({
-					sfdcuserid : userid,
-					startdate : sdate,
-					enddate : edate,
-					metadata : metaobj,
-					logintoken : logintoken,
-
-				}),
-
-				async : true,
-				cache : true,
-				beforeSend : function() {
-
-				},
-				complete : function(xhr, status) {
-					if (status == "success")
-						{
-							callmeatdata(userid,sdate,edate,metaobj,logintoken);
-							$("#getdatabutton").prop('disabled', false);
-						}
-				},
-				success : function(result, status, xhr) {
-					alert("db entry response - " + result + " status - " + status);
-
-				}
-			});
+			if(sdate.length==0 || edate.length==0)
+			{
+				alert("Enter valid Date");
+				return;
+			}
+			if (metaobj.length === 0) {
+				alert("Select atleast one Object");
+				return;
+			}
+			
+			$
+					.ajax({
+						method : "GET",
+						url : "metadataresources/sfdcmetadataPSQL/",
+						data : ({
+							sfdcuserid : userid,
+						}),
+						async : true,
+						cache : true,
+						beforeSend : function() {
+							document.getElementById("loader").style.display = "inline-block";
+							document.getElementById("procmsg").style.display = "inline-block";
+							$("#senddatabutton").prop('disabled', true);
+						},
+						complete : function(xhr, status) {
+							if (parseInt(xhr.responseText) === 200) {
+								temptimeout = setInterval(function(){getfinaldata(userid)},5000);
+								callmeatdata(userid, sdate, edate, metaobj,logintoken);
+							} else if (parseInt(xhr.responseText) === 422) { // remove it after testing
+								document.getElementById("loader").style.display = "none";
+								document.getElementById("procmsg").style.display = "none";
+								$("#senddatabutton").prop('disabled', false);
+								alert("Invalid entry try again");
+							} else if (parseInt(xhr.responseText) === 400) {
+								document.getElementById("loader").style.display = "none";
+								document.getElementById("procmsg").style.display = "none";
+								$("#senddatabutton").prop('disabled', false);
+								//alert("Something going wrong");
+							}
+						},
+						success : function(result, status, xhr) {}
+					});
 		}
-		function callmeatdata(userid,sdate,edate,metaobj,logintoken) {
-			$.ajax({
-				method : "GET",
-				url : "metadataresources/callheroku/",
-
-				data : ({
-					sfdcuserid : userid,
-					startdate : sdate,
-					enddate : edate,
-					metadata : metaobj,
-					logintoken : logintoken,
-
-				}),
-
-				async : true,
-				cache : true,
-				beforeSend : function() {
-
-				},
-				complete : function(xhr, status) {
-					if (status == "success")
-						alert("metadata response status - " + status);
-				},
-				success : function(result, status, xhr) {
-					//alert("metadata response - " + result + " status - " + status);
-
-				}
-			});
-
+		function callmeatdata(userid, sdate, edate, metaobj, logintoken) {
+			$
+					.ajax({
+						method : "GET",
+						url : "metadataresources/callheroku/",
+						data : ({
+							sfdcuserid : userid,
+							startdate : sdate,
+							enddate : edate,
+							metadata : metaobj,
+							logintoken : logintoken,
+						}),
+						async : true,
+						cache : true,
+						beforeSend : function() {
+							
+						},
+						complete : function(xhr, status) {
+							if (parseInt(xhr.responseText) === 204) {
+								document.getElementById("loader").style.display = "none";
+								document.getElementById("procmsg").style.display = "none";
+								$("#senddatabutton").prop('disabled', false);
+								alert("Metadata not found");
+								clearInterval(temptimeout);
+							}  /*  else if (xhr.responseText === "200") {
+								$("#senddatabutton").prop('disabled', false);
+								getfinaldata(userid,sdate);
+							}   */
+						},
+						success : function(result, status, xhr) {
+						}
+					});
 		}
 		
-		function getfinaldata() {
-			var userid = document.getElementById("sfdcuserid").value;
-			$.ajax({
-				method : "GET",
-				url : "metadataresources/herokuDB/getfinaldata/",
-
-				data : ({
-					sfdcuserid : userid,
-				}),
-
-				async : false,
-				cache : true,
-				beforeSend : function() {
-
-				},
-				complete : function(xhr, status) {
-					if (status == "success")
-						{
-						//	alert("metadata response - " + xhr.responseText + " status - " + status);
-							var blob = new Blob([xhr.responseText],{type:"application/xml;charset=utf-8"});
-							saveAs(blob,"metadata.xml");
+		function getfinaldata(userid) {
+			/* var userid1 = document.getElementById("sfdcuserid").value;
+			if (userid != userid1.split("##")[1]) {
+				alert("Please select correct User");
+				return;
+			} */
+			$
+					.ajax({
+						method : "GET",
+						url : "metadataresources/herokuDB/getfinaldata/",
+						data : ({
+							sfdcuserid : userid,
+						}),
+						async : false,
+						cache : true,
+						beforeSend : function() {
+						},
+						complete : function(xhr, status) {
+							if ( parseInt(xhr.responseText)!=204) {
+								document.getElementById("loader").style.display = "none";
+								document.getElementById("procmsg").style.display = "none";
+								var blob = new Blob([ xhr.responseText ], {
+									type : "application/xml;charset=utf-8"
+								});
+								saveAs(blob, "metadata.xml");
+								$("#senddatabutton").prop('disabled', false);
+								clearInterval(temptimeout);
+							}
+						},
+						success : function(result, status, xhr) {
 						}
-				},
-				success : function(result, status, xhr) {
-					//alert("metadata response - " + result + " status - " + status);
-
-				}
-			});
-
+					});
 		}
 	</script>
 </body>

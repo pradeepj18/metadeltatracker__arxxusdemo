@@ -439,6 +439,7 @@ public class MetadataResource {
 								customFieldArray.getJSONObject(j).getString("TableEnumOrId"));
 						customObjectName += "__c";
 					}
+					System.out.println(customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c");
 					Element xmlcustomfieldMembers = doc.createElement("members");
 					xmlcustomfieldMembers.appendChild(doc.createTextNode(customObjectName + "."
 							+ customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c"));

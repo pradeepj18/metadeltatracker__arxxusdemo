@@ -43,12 +43,12 @@ public class MetadataRepository {
 		StringBuffer edate = new StringBuffer();
 		edate.append(enddate);
 		edate.append("T23:59:59.000Z");
-
+/*
 		System.out.println("sfdcuserid - " + sfdcuserid);
 		System.out.println(sdate + "---" + edate);
 		System.out.println("metadata - " + classnames);
 		System.out.println("logintoken - " + loginobject);
-
+*/
 		for (int i = 0; i < classnames.size(); i++) {
 			switch (Integer.parseInt(classnames.get(i))) {
 			case 101:

@@ -2,13 +2,12 @@ package repository;
 
 import java.io.File;
 import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import credentials.RestLogin;
@@ -20,9 +19,7 @@ public class CallMetadata {
 	MetadataResource metadataResource = new MetadataResource();
 
 	@GET
-	/*public Response getdata(List<String> classnames, String sfdcuserid, String startdate, String enddate,
-			List<String> logintoken, String sfdcusername) throws Exception {*/
-	
+	@Produces({ MediaType.TEXT_PLAIN })
 	public Response getdata(@QueryParam("metadata[]") List<String> classnames,
 			@QueryParam("sfdcuserid") String sfdcuserid_usrname, @QueryParam("startdate") String startdate,
 			@QueryParam("enddate") String enddate, @QueryParam("logintoken[]") List<String> logintoken)
@@ -35,7 +32,7 @@ public class CallMetadata {
 			loginobject.put("instance_url", logintoken.get(0));
 			loginobject.put("access_token", logintoken.get(1) + logintoken.get(2));
 		} else {
-			loginobject = RestLogin.GetLoginObject();
+			loginobject = RestLogin.GetLoginObject();// remove it once connected to lightning
 		}
 		StringBuffer sdate = new StringBuffer();
 		sdate.append(startdate);
@@ -44,22 +41,15 @@ public class CallMetadata {
 		StringBuffer edate = new StringBuffer();
 		edate.append(enddate);
 		edate.append("T23:59:59.000Z");
-
-		System.out.println("sfdcuserid - " + sfdcuserid);
-		System.out.println(sdate + "---" + edate);
-		System.out.println("metadata - " + classnames);
-		System.out.println("logintoken - " + loginobject);
-		System.out.println("sfdcusername - " + sfdcusername);
-
 		for (int i = 0; i < classnames.size(); i++) {
 			switch (Integer.parseInt(classnames.get(i))) {
 			case 101:
 				metadataResource.getApexClasses(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			case 102:
+			case 103:
 				metadataResource.getApexPages(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			case 103:
+			case 102:
 				metadataResource.getApexComponents(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
 			case 104:
@@ -104,9 +94,10 @@ public class CallMetadata {
 			case 117:
 				metadataResource.getFieldSet(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			case 118:
-				metadataResource.getFlexiPage(loginobject, sfdcuserid, sdate.toString(), edate.toString());
-				break;
+			/*
+			 * case 118: metadataResource.getFlexiPage(loginobject, sfdcuserid,
+			 * sdate.toString(), edate.toString()); break;
+			 */
 			case 119:
 				metadataResource.getFlow(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
@@ -155,7 +146,6 @@ public class CallMetadata {
 			case 134:
 				metadataResource.getWorkFlowTask(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-
 			}
 		}
 		File file = metadataResource.saveXml();
@@ -163,16 +153,16 @@ public class CallMetadata {
 			@SuppressWarnings("deprecation")
 			String xml = FileUtils.readFileToString(new File(file.getPath()));
 			JSONObject jsonmetadata = org.json.XML.toJSONObject(xml);
-			System.out.println("JSON - created");
-			PsqlDataHouse.setMetadataObjtoDB(sfdcusername, jsonmetadata);
-			//ResponseBuilder response = Response.ok((Object) file);
-			//response.header("Content-Disposition", "attachment;filename=" + file.getName());
-			//return response.build();
-			return Response.status(200).entity("Metadata process complete").build();	
+			if (PsqlDataHouse.setMetadataObjtoDB(sfdcusername, jsonmetadata) != 0) {
+				System.out.println("JSON - created");
+				return Response.status(200).entity("200").build();// Metadata process complete,now you can download xml file
+			} else {
+				return Response.status(200).entity("204").build();
+			}
 		} else {
 			System.out.println("file null");
 			PsqlDataHouse.delteDBEntry(sfdcusername);
-			return Response.status(200).entity("Metadata Not Found").build();
+			return Response.status(200).entity("204").build();// Metadata not found
 		}
 	}
 }
