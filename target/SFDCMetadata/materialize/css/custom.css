@@ -1,0 +1,261 @@
+@media only screen and (max-width: 600px) {
+	/* -----------------------Video ------------------------- */
+	.scrn-size {
+		width: 100%;
+		height: 100%;
+	}
+	#content {
+		background-color: #1a3c5b;
+		margin-top: -2%;
+		color: #fff;
+	}
+	/* ------------------Gallery start---------------------- */
+	.video-mno
+	{
+	font-size:20px;
+	}
+	.imgcard {
+	display: block;
+	border-radius: 0px 0px 0 0;
+	position: relative;
+	left: 0px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 180px;
+	max-height: 180px;
+}
+
+.card-content.imgcard-title {
+	height: 80px;
+	padding: 10px 0px 0px 25px;
+	max-height: 90px;
+}
+
+.modal {
+	width: 100% !important;
+	height: 70% !important;
+	overflow: hidden;
+    background-color: transparent;
+}
+.slider .slides li img {
+    height: 50%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+}
+.ind-top1
+{
+	margin-top:-50%;
+}
+.modal .modal-content {
+	padding: 0px 0px 0px 0px;
+}
+.slider .slides {
+    background-color: transparent;
+    margin: 0;
+}
+
+.slider .indicators {
+	position: absolute;
+	text-align: center;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	display: none;
+}
+#previous:hover,#next:hover{
+		color:#da0040;
+	}
+#previous {
+	transform: rotate(180deg);
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+
+#next {
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+	
+	/* ------------------Gallery end ------------------ */
+	
+}
+
+@media only screen and (min-width:601px) and (max-width: 992px) {
+	/* -----------------------Video ------------------------- */
+	.scrn-size {
+		width: 100%;
+		height: 100%;
+	}
+	#content {
+		background-color: #1a3c5b;
+		margin-top: -2%;
+		color: #fff;
+	}
+		/* ------------------Gallery start---------------------- */
+		.video-mno
+	{
+	font-size:16px;
+	}
+	.imgcard {
+	display: block;
+	border-radius: 0px 0px 0 0;
+	position: relative;
+	left: 0px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 180px;
+	max-height: 180px;
+}
+
+.card-content.imgcard-title {
+	height: 65px;
+	padding: 12px 0px 0px 25px;
+	max-height: 65px;
+}
+
+.modal {
+	width: 60% !important;
+	height: 70% !important;
+	overflow: hidden;
+}
+
+.modal .modal-content {
+	padding: 0px 0px 0px 0px;
+}
+
+.slider .indicators {
+	position: absolute;
+	text-align: center;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	display: none;
+}
+#previous:hover,#next:hover{
+		color:#da0040;
+	}
+#previous {
+	transform: rotate(180deg);
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+
+#next {
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+	
+	/* ------------------Gallery end ------------------ */
+}
+
+@media only screen and (min-width: 993px) {
+	/* -----------------------Video ------------------------- */
+	.scrn-size {
+		width: 100%;
+		height: 100%;
+	}
+	#content {
+		background-color: #1a3c5b;
+		margin-top: -2%;
+		color: #fff;
+	}
+		/* ------------------Gallery start---------------------- */
+	.imgcard {
+	display: block;
+	border-radius: 0px 0px 0 0;
+	position: relative;
+	left: 0px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 180px;
+	max-height: 180px;
+}
+
+.card-content.imgcard-title {
+	height: 80px;
+	padding: 1px 0px 0px 25px;
+	max-height: 90px;
+}
+
+.modal {
+	width: 60% !important;
+	height: 100% !important;
+	overflow: hidden;
+}
+
+.modal .modal-content {
+	padding: 0px 0px 0px 0px;
+}
+
+.slider .indicators {
+	position: absolute;
+	text-align: center;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	display: none;
+}
+#previous:hover,#next:hover{
+		color:#da0040;
+	}
+#previous {
+	transform: rotate(180deg);
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+
+#next {
+	cursor: pointer;
+	color: rgb(97, 126, 148);
+	font-size: 55px;
+}
+	
+	/* ------------------Gallery end ------------------ */
+}
+
+
+.my-pre-loader {
+	position: absolute;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	border: 8px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 6px solid #3498db;
+	border-bottom: 6px solid #3498db;
+	width: 40px;
+	height: 40px;
+	-webkit-animation: spin 3s linear infinite;
+	animation: spin 3s linear infinite;
+}
+
+ @-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  50% { -webkit-transform: rotate(180deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+} 
+#procmsg {
+	display: none;
+	margin-left: 5%;
+	font-size: 16px;
+	font-weight: 400;
+}

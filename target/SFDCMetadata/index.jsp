@@ -25,39 +25,9 @@
 	src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js">
 	
 </script>
+<link type="text/css" rel="stylesheet"
+	href="materialize/css/custom.css" media="screen,projection" />
 
-<style>
-.my-pre-loader {
-	position: absolute;
-	z-index: 1;
-	width: 150px;
-	height: 150px;
-	border: 8px solid #f3f3f3;
-	border-radius: 50%;
-	border-top: 6px solid #3498db;
-	border-bottom: 6px solid #3498db;
-	width: 40px;
-	height: 40px;
-	-webkit-animation: spin 3s linear infinite;
-	animation: spin 3s linear infinite;
-}
-
- @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  50% { -webkit-transform: rotate(180deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(180deg); }
-} 
-#procmsg {
-	display: none;
-	margin-left: 5%;
-	font-size: 16px;
-	font-weight: 400;
-}
-</style>
 </head>
 <body>
 	<div class="container" id="noscript">
