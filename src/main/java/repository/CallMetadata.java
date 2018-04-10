@@ -31,9 +31,7 @@ public class CallMetadata {
 		if (logintoken.size() != 0) {
 			loginobject.put("instance_url", logintoken.get(0));
 			loginobject.put("access_token", logintoken.get(1) + logintoken.get(2));
-		} else {
-			loginobject = RestLogin.GetLoginObject();// remove it once connected to lightning
-		}
+		} 
 		StringBuffer sdate = new StringBuffer();
 		sdate.append(startdate);
 		sdate.append("T00:00:00.000Z");

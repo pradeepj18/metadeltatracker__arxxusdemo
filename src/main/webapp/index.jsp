@@ -25,17 +25,17 @@
 	src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js">
 	
 </script>
-<link type="text/css" rel="stylesheet"
-	href="materialize/css/custom.css" media="screen,projection" />
+<link type="text/css" rel="stylesheet" href="materialize/css/custom.css"
+	media="screen,projection" />
 
 </head>
 <body>
 	<div class="container" id="noscript">
 		<h4>Salesforce Metadata Application!</h4>
 		<div class="row">
-			<div class="input-field col s12 m6 l6" style=" margin-bottom: -30px;">
-				<select  name="sfdcuserid" id="sfdcuserid" required>
-				
+			<div class="input-field col s12 m6 l6" style="margin-bottom: -30px;">
+				<select name="sfdcuserid" id="sfdcuserid" required>
+
 					<%
 						JSONObject loginObject = RestLogin.GetLoginObject();
 						JSONArray UserArray = DataWarehouse.getUserCred(loginObject);
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="input-field col s12 m12 l6" >
+			<div class="input-field col s12 m12 l6">
 				<label for="startdate">Start Date</label> <input id="startdate"
 					type="text" class="datepicker" name="startdate" required>
 			</div>
@@ -259,17 +259,18 @@
 						<span>WorkflowRulle</span>
 					</label>
 				</p>
-				
+
 			</div>
 		</div>
 		<div class="row">
-			<button class="btn waves-effect red lighten-2"
-				onclick="senddata();" id="senddatabutton">
+			<button class="btn waves-effect red lighten-2" onclick="senddata();"
+				id="senddatabutton">
 				Fetch Metadata <i class="material-icons right">send</i>
-			</button>&nbsp;&nbsp;
+			</button>
+			&nbsp;&nbsp;
 			<div style="display: none" class="my-pre-loader" id="loader"
 				title="Processing metadata"></div>
-				<div class="red-text" id="procmsg">Processing Metadata</div>
+			<div class="red-text" id="procmsg">Processing Metadata</div>
 			<!-- <button class="btn waves-effect waves-light teal right"
 				id="getdatabutton" onclick="getfinaldata();" disabled>Download
 				file</button> -->
@@ -279,22 +280,22 @@
 		$(document).ready(function() {
 			$("#startdate").click(function() {
 				$('.datepicker').pickadate({
-					today: 'Today',
-				    clear: 'Clear',
-				    close: 'Ok',
-				    closeOnSelect: false,
+					today : 'Today',
+					clear : 'Clear',
+					close : 'Ok',
+					closeOnSelect : false,
 					format : 'yyyy-mm-dd',
 					max : new Date(),
 				});
-			//	$('.datepicker1').pickadate(clear);
+				//	$('.datepicker1').pickadate(clear);
 			});
 
 			$("#enddate").click(function() {
 				$('.datepicker1').pickadate({
-					today: 'Today',
-				    clear: 'Clear',
-				    close: 'Ok',
-				    closeOnSelect: false,
+					today : 'Today',
+					clear : 'Clear',
+					close : 'Ok',
+					closeOnSelect : false,
 					format : 'yyyy-mm-dd',
 					//min : new Date($("#startdate").val()),
 					max : new Date(),
@@ -302,7 +303,7 @@
 			});
 		});
 		$(document).ready(function() {
-		    $('select').material_select();
+			$('select').material_select();
 		});
 	</script>
 
@@ -319,8 +320,7 @@
 			$.each($("input[name='metadata']:checked"), function() {
 				metaobj.push($(this).val());
 			});
-			if(sdate.length==0 || edate.length==0)
-			{
+			if (sdate.length == 0 || edate.length == 0) {
 				alert("Enter valid Date");
 				return;
 			}
@@ -328,14 +328,17 @@
 				alert("Select atleast one Object");
 				return;
 			}
-			
+			window.proxy = 'https://cors-anywhere.herokuapp.com/';
 			$
 					.ajax({
 						method : "GET",
-						url : "metadataresources/sfdcmetadataPSQL/",
+					//	crossDomain : true,
+						url : proxy+"https://sfdcmetadatapsql.herokuapp.com/metadataresources/sfdcmetadataPSQL/",
 						data : ({
 							sfdcuserid : userid,
 						}),
+
+					//	dataType : 'jsonp',
 						async : true,
 						cache : true,
 						beforeSend : function() {
@@ -345,8 +348,11 @@
 						},
 						complete : function(xhr, status) {
 							if (parseInt(xhr.responseText) === 200) {
-								temptimeout = setInterval(function(){getfinaldata(userid)},10000);
-								callmeatdata(userid, sdate, edate, metaobj,logintoken);
+								temptimeout = setInterval(function() {
+									getfinaldata(userid)
+								}, 10000);
+								callmeatdata(userid, sdate, edate, metaobj,
+										logintoken);
 							} else if (parseInt(xhr.responseText) === 422) { // remove it after testing
 								document.getElementById("loader").style.display = "none";
 								document.getElementById("procmsg").style.display = "none";
@@ -359,14 +365,16 @@
 								//alert("Something going wrong");
 							}
 						},
-						success : function(result, status, xhr) {}
+						success : function(result, status, xhr) {
+						}
 					});
 		}
 		function callmeatdata(userid, sdate, edate, metaobj, logintoken) {
 			$
 					.ajax({
 						method : "GET",
-						url : "metadataresources/callheroku/",
+					//	crossDomain : true,
+						url : proxy+"https://sfdcmetadatapsql.herokuapp.com/metadataresources/callheroku/",
 						data : ({
 							sfdcuserid : userid,
 							startdate : sdate,
@@ -374,10 +382,12 @@
 							metadata : metaobj,
 							logintoken : logintoken,
 						}),
+
+					//	dataType : 'jsonp',
 						async : true,
 						cache : true,
 						beforeSend : function() {
-							
+
 						},
 						complete : function(xhr, status) {
 							if (parseInt(xhr.responseText) === 204) {
@@ -386,16 +396,16 @@
 								$("#senddatabutton").prop('disabled', false);
 								alert("Metadata not found");
 								clearInterval(temptimeout);
-							}  /*  else if (xhr.responseText === "200") {
-								$("#senddatabutton").prop('disabled', false);
-								getfinaldata(userid,sdate);
-							}   */
+							} /*  else if (xhr.responseText === "200") {
+														$("#senddatabutton").prop('disabled', false);
+														getfinaldata(userid,sdate);
+													}   */
 						},
 						success : function(result, status, xhr) {
 						}
 					});
 		}
-		
+
 		function getfinaldata(userid) {
 			/* var userid1 = document.getElementById("sfdcuserid").value;
 			if (userid != userid1.split("##")[1]) {
@@ -405,16 +415,18 @@
 			$
 					.ajax({
 						method : "GET",
-						url : "metadataresources/herokuDB/getfinaldata/",
+					//	crossDomain : true,
+						url :proxy+ "https://sfdcmetadatapsql.herokuapp.com/metadataresources/herokuDB/getfinaldata/",
 						data : ({
 							sfdcuserid : userid,
 						}),
+						//dataType : 'jsonp',
 						async : false,
 						cache : true,
 						beforeSend : function() {
 						},
 						complete : function(xhr, status) {
-							if ( parseInt(xhr.responseText)!=204) {
+							if (parseInt(xhr.responseText) != 204) {
 								document.getElementById("loader").style.display = "none";
 								document.getElementById("procmsg").style.display = "none";
 								var blob = new Blob([ xhr.responseText ], {
