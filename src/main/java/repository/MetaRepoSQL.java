@@ -12,9 +12,6 @@ import javax.ws.rs.core.Response;
 @Path("sfdcmetadataPSQL")
 public class MetaRepoSQL {
 	
-	/*@GET
-	@Produces({ MediaType.TEXT_PLAIN })
-	public Response getdata(@QueryParam("sfdcuserid") String sfdcuserid_usrname) throws Exception {*/
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getdata(String sfdcuserid_usrname) throws Exception {
