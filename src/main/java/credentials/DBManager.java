@@ -1,5 +1,6 @@
 package credentials;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
@@ -9,26 +10,31 @@ public class DBManager {
 	static Statement stmt;
 	static ResultSet rs;
 
-	public static Connection loadDriver() throws URISyntaxException, SQLException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+	/*
+	 * create type checkstatus as enum('true','false'); create table sfdcmetadata
+	 * (datakey varchar(100),entrydate timestamp,metadata text,status checkstatus);
+	 */
 
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
-        con = DriverManager.getConnection(dbUrl, username, password);
-        return con;
-    }
+	public static Connection loadDriver() throws URISyntaxException, SQLException {
+		URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+		String username = dbUri.getUserInfo().split(":")[0];
+		String password = dbUri.getUserInfo().split(":")[1];
+		String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+		con = DriverManager.getConnection(dbUrl, username, password);
+		return con;
+	}
 
 	public static Connection loadDriverTest() throws URISyntaxException, SQLException {
 		try {
 			Class.forName("org.postgresql.Driver");
-			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/metadata","postgres", "psql");
+			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/herokutest", "postgres", "psql");
 		} catch (ClassNotFoundException e) {
 			System.out.println("Exception in DBManager....for load driver.." + e);
 		}
-		
+
 		return con;
-    }
+	}
 
 	public static ResultSet fetchQuery(String query) {
 		try {
@@ -54,7 +60,7 @@ public class DBManager {
 		}
 		return 0;
 	}
-	
+
 	public static void close() {
 		try {
 			stmt.close();
@@ -63,6 +69,18 @@ public class DBManager {
 
 		catch (Exception e) {
 			System.out.println("Exception in DBManager....for CreUpDel.." + e.getMessage());
+		}
+	}
+
+	public static void deleteFiles(File file) {
+		try {
+			if (file.exists()) {
+
+				file.delete();
+			}
+			else {System.out.println("not");}
+		} catch (Exception e) {
+			System.out.println("deletefile " + e.getMessage());
 		}
 	}
 

@@ -1,62 +1,17 @@
 package metadataResources;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import credentials.RestLogin;
 import dataContainer.DataWarehouse;
-import metadataPOJO.ApexClass;
-import metadataPOJO.ApexComponent;
-import metadataPOJO.ApexPage;
-import metadataPOJO.ApexTrigger;
-import metadataPOJO.AssignmentRule;
-import metadataPOJO.AuraDefinitionBundle;
-import metadataPOJO.AutoResponse;
-import metadataPOJO.BusinessProcess;
-import metadataPOJO.CompactLayout;
-import metadataPOJO.ConnectedApplication;
-import metadataPOJO.CustomApplication;
-import metadataPOJO.CustomField;
-import metadataPOJO.CustomObject;
-import metadataPOJO.CustomTab;
-import metadataPOJO.Dashboard;
-import metadataPOJO.EmailTemplate;
-import metadataPOJO.FieldSet;
-import metadataPOJO.FlexiPage;
-import metadataPOJO.Flow;
-import metadataPOJO.GlobalValueSet;
-import metadataPOJO.HomePageLayout;
-import metadataPOJO.Layout;
-import metadataPOJO.Permission;
-import metadataPOJO.Profile;
-import metadataPOJO.RecordType;
-import metadataPOJO.Report;
-import metadataPOJO.StaticResources;
-import metadataPOJO.User;
-import metadataPOJO.ValidationRule;
-import metadataPOJO.WebLink;
-import metadataPOJO.WorkFlowAlert;
-import metadataPOJO.WorkFlowFieldUpdate;
-import metadataPOJO.WorkFlowRule;
-import metadataPOJO.WorkFlowTask;
 
 public class MetadataResource {
-
-	/*JSONObject loginObject = RestLogin.GetLoginObject();
-	String startdate = "2018-02-01T17:23:04.000Z";
-	String enddate = "2018-03-01T17:23:04.000Z";*/
 	Document doc;
 	Element xmlroot;
 
@@ -73,9 +28,9 @@ public class MetadataResource {
 		}
 	}
 
-	public List<ApexClass> getApexClasses(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		JSONArray apexclassArray = DataWarehouse.getApexClassList(loginObject, startdate, enddate,sfdcuserid);
-		List<ApexClass> apexClassList = new ArrayList<ApexClass>();
+	public void getApexClasses(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+		JSONArray apexclassArray = DataWarehouse.getApexClassList(loginObject, startdate, enddate, sfdcuserid);
 		if (apexclassArray != null) {
 			if (apexclassArray.length() > 0) {
 				Element xmlapexclasstype = doc.createElement("types");
@@ -88,10 +43,7 @@ public class MetadataResource {
 						xmlapexclassMembers
 								.appendChild(doc.createTextNode(apexclassArray.getJSONObject(i).getString("Name")));
 						xmlapexclasstype.appendChild(xmlapexclassMembers);
-						
-						ApexClass apexClass = new ApexClass();
-						apexClass.setName(apexclassArray.getJSONObject(i).getString("Name"));
-						apexClassList.add(apexClass);
+
 					}
 					Element xmlapexclassName = doc.createElement("name");
 					xmlapexclassName.appendChild(doc.createTextNode("ApexClass"));
@@ -101,12 +53,13 @@ public class MetadataResource {
 				}
 			}
 		}
-		return apexClassList;
+
 	}
 
-	public List<ApexTrigger> getApexTriggers(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		JSONArray apexTriggerArray = DataWarehouse.getApexTriggerList(loginObject, startdate, enddate,sfdcuserid);
-		List<ApexTrigger> apexTriggerList = new ArrayList<ApexTrigger>();
+	public void getApexTriggers(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+		JSONArray apexTriggerArray = DataWarehouse.getApexTriggerList(loginObject, startdate, enddate, sfdcuserid);
+	
 		if (apexTriggerArray != null) {
 			if (apexTriggerArray.length() > 0) {
 				Element xmlapextriggertype = doc.createElement("types");
@@ -118,9 +71,7 @@ public class MetadataResource {
 						xmlapextriggerMembers
 								.appendChild(doc.createTextNode(apexTriggerArray.getJSONObject(i).getString("Name")));
 						xmlapextriggertype.appendChild(xmlapextriggerMembers);
-						ApexTrigger apexTrigger = new ApexTrigger();
-						apexTrigger.setName(apexTriggerArray.getJSONObject(i).getString("Name"));
-						apexTriggerList.add(apexTrigger);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -130,12 +81,13 @@ public class MetadataResource {
 				xmlapextriggertype.appendChild(xmlapextriggerName);
 			}
 		}
-		return apexTriggerList;
+
 	}
 
-	public List<ApexPage> getApexPages(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<ApexPage> apexPageList = new ArrayList<ApexPage>();
-		JSONArray apexPageArray = DataWarehouse.getApexPageList(loginObject, startdate, enddate,sfdcuserid);
+	public void getApexPages(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray apexPageArray = DataWarehouse.getApexPageList(loginObject, startdate, enddate, sfdcuserid);
 		if (apexPageArray != null) {
 			if (apexPageArray.length() > 0) {
 				Element xmlapexPagetype = doc.createElement("types");
@@ -146,9 +98,7 @@ public class MetadataResource {
 						xmlapexPageMembers
 								.appendChild(doc.createTextNode(apexPageArray.getJSONObject(i).getString("Name")));
 						xmlapexPagetype.appendChild(xmlapexPageMembers);
-						ApexPage apexPage = new ApexPage();
-						apexPage.setName(apexPageArray.getJSONObject(i).getString("Name"));
-						apexPageList.add(apexPage);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -158,12 +108,13 @@ public class MetadataResource {
 				xmlapexPagetype.appendChild(xmlapexPageName);
 			}
 		}
-		return apexPageList;
+
 	}
 
-	public List<ApexComponent> getApexComponents(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<ApexComponent> ApexComponentList = new ArrayList<ApexComponent>();
-		JSONArray apexComponentArray = DataWarehouse.getApexComponentList(loginObject, startdate, enddate,sfdcuserid);
+	public void getApexComponents(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray apexComponentArray = DataWarehouse.getApexComponentList(loginObject, startdate, enddate, sfdcuserid);
 		if (apexComponentArray != null) {
 			if (apexComponentArray.length() > 0) {
 				Element xmlapexComponenttype = doc.createElement("types");
@@ -174,9 +125,7 @@ public class MetadataResource {
 						xmlapexComponentMembers
 								.appendChild(doc.createTextNode(apexComponentArray.getJSONObject(i).getString("Name")));
 						xmlapexComponenttype.appendChild(xmlapexComponentMembers);
-						ApexComponent apexComponent = new ApexComponent();
-						apexComponent.setName(apexComponentArray.getJSONObject(i).getString("Name"));
-						ApexComponentList.add(apexComponent);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -186,12 +135,14 @@ public class MetadataResource {
 				xmlapexComponenttype.appendChild(xmlapexComponentName);
 			}
 		}
-		return ApexComponentList;
+
 	}
 
-	public List<AssignmentRule> getAssignmentRule(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<AssignmentRule> AssignmentRuleList = new ArrayList<AssignmentRule>();
-		JSONArray assignmentRuleArray = DataWarehouse.getAssignmentRuleList(loginObject, startdate, enddate,sfdcuserid);
+	public void getAssignmentRule(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray assignmentRuleArray = DataWarehouse.getAssignmentRuleList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (assignmentRuleArray != null) {
 			if (assignmentRuleArray.length() > 0) {
 				Element xmlassignmentRuletype = doc.createElement("types");
@@ -203,11 +154,7 @@ public class MetadataResource {
 								doc.createTextNode(assignmentRuleArray.getJSONObject(i).getString("EntityDefinitionId")
 										+ "." + assignmentRuleArray.getJSONObject(i).getString("Name")));
 						xmlassignmentRuletype.appendChild(xmlassignmentRuleMembers);
-						AssignmentRule assign = new AssignmentRule();
-						assign.setEntityDefinitionId(
-								assignmentRuleArray.getJSONObject(i).getString("EntityDefinitionId"));
-						assign.setName(assignmentRuleArray.getJSONObject(i).getString("Name"));
-						AssignmentRuleList.add(assign);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -217,12 +164,14 @@ public class MetadataResource {
 				xmlassignmentRuletype.appendChild(xmlassignmentRuleName);
 			}
 		}
-		return AssignmentRuleList;
+
 	}
 
-	public List<AuraDefinitionBundle> getAuraDefinitionBundle(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<AuraDefinitionBundle> AuraDefinitionBundleList = new ArrayList<AuraDefinitionBundle>();
-		JSONArray auraDefinitionBundleArray = DataWarehouse.getAuraDefinitionBundleList(loginObject, startdate,enddate,sfdcuserid);
+	public void getAuraDefinitionBundle(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray auraDefinitionBundleArray = DataWarehouse.getAuraDefinitionBundleList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (auraDefinitionBundleArray != null) {
 			if (auraDefinitionBundleArray.length() > 0) {
 				Element xmlAuraDefinitionBundletype = doc.createElement("types");
@@ -233,9 +182,7 @@ public class MetadataResource {
 						xmlAuraDefinitionBundleMembers.appendChild(doc
 								.createTextNode(auraDefinitionBundleArray.getJSONObject(i).getString("DeveloperName")));
 						xmlAuraDefinitionBundletype.appendChild(xmlAuraDefinitionBundleMembers);
-						AuraDefinitionBundle aura = new AuraDefinitionBundle();
-						aura.setDeveloperName(auraDefinitionBundleArray.getJSONObject(i).getString("DeveloperName"));
-						AuraDefinitionBundleList.add(aura);
+
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -245,12 +192,13 @@ public class MetadataResource {
 				xmlAuraDefinitionBundletype.appendChild(xmlAuraDefinitionBundleName);
 			}
 		}
-		return AuraDefinitionBundleList;
+
 	}
 
-	public List<AutoResponse> getAutoResponse(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<AutoResponse> AutoResponseList = new ArrayList<AutoResponse>();
-		JSONArray autoResponseArray = DataWarehouse.getAutoResponseList(loginObject, startdate, enddate,sfdcuserid);
+	public void getAutoResponse(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray autoResponseArray = DataWarehouse.getAutoResponseList(loginObject, startdate, enddate, sfdcuserid);
 		if (autoResponseArray != null) {
 			if (autoResponseArray.length() > 0) {
 				Element xmlautoResponseListtype = doc.createElement("types");
@@ -261,9 +209,7 @@ public class MetadataResource {
 						xmlautoResponseListMembers
 								.appendChild(doc.createTextNode(autoResponseArray.getJSONObject(i).getString("Name")));
 						xmlautoResponseListtype.appendChild(xmlautoResponseListMembers);
-						AutoResponse autores = new AutoResponse();
-						autores.setName(autoResponseArray.getJSONObject(i).getString("Name"));
-						AutoResponseList.add(autores);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -274,12 +220,14 @@ public class MetadataResource {
 				xmlautoResponseListtype.appendChild(xmlautoResponseListName);
 			}
 		}
-		return AutoResponseList;
+
 	}
 
-	public List<BusinessProcess> getBusinessProcess(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<BusinessProcess> BusinessProcessList = new ArrayList<BusinessProcess>();
-		JSONArray businessProcessArray = DataWarehouse.getBusinessProcessList(loginObject, startdate, enddate,sfdcuserid);
+	public void getBusinessProcess(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray businessProcessArray = DataWarehouse.getBusinessProcessList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (businessProcessArray != null) {
 			if (businessProcessArray.length() > 0) {
 				Element xmlbusinessProcesstype = doc.createElement("types");
@@ -290,9 +238,7 @@ public class MetadataResource {
 						xmlbusinessProcessMembers.appendChild(
 								doc.createTextNode(businessProcessArray.getJSONObject(i).getString("Name")));
 						xmlbusinessProcesstype.appendChild(xmlbusinessProcessMembers);
-						BusinessProcess bp = new BusinessProcess();
-						bp.setName(businessProcessArray.getJSONObject(i).getString("Name"));
-						BusinessProcessList.add(bp);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -302,12 +248,13 @@ public class MetadataResource {
 				xmlbusinessProcesstype.appendChild(xmlbusinessProcessName);
 			}
 		}
-		return BusinessProcessList;
+
 	}
 
-	public List<CompactLayout> getCompactLayout(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<CompactLayout> CompactLayoutList = new ArrayList<CompactLayout>();
-		JSONArray compactLayoutArray = DataWarehouse.getCompactLayoutList(loginObject, startdate, enddate,sfdcuserid);
+	public void getCompactLayout(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray compactLayoutArray = DataWarehouse.getCompactLayoutList(loginObject, startdate, enddate, sfdcuserid);
 		if (compactLayoutArray != null) {
 			if (compactLayoutArray.length() > 0) {
 				Element xmlcompactLayouttype = doc.createElement("types");
@@ -320,10 +267,7 @@ public class MetadataResource {
 								doc.createTextNode(compactLayoutArray.getJSONObject(i).getString("SobjectType") + "."
 										+ compactLayoutArray.getJSONObject(i).getString("DeveloperName")));
 						xmlcompactLayouttype.appendChild(xmlcompactLayoutMembers);
-						CompactLayout cl = new CompactLayout();
-						cl.setSobjectType(compactLayoutArray.getJSONObject(i).getString("SobjectType"));
-						cl.setDeveloperName(compactLayoutArray.getJSONObject(i).getString("DeveloperName"));
-						CompactLayoutList.add(cl);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -333,12 +277,14 @@ public class MetadataResource {
 				xmlcompactLayouttype.appendChild(xmlcompactLayoutName);
 			}
 		}
-		return CompactLayoutList;
+
 	}
 
-	public List<ConnectedApplication> getConnectedApplication(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<ConnectedApplication> ConnectedApplicationList = new ArrayList<ConnectedApplication>();
-		JSONArray connectedApplicationArray = DataWarehouse.getConnectedApplicationList(loginObject, startdate,enddate,sfdcuserid);
+	public void getConnectedApplication(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray connectedApplicationArray = DataWarehouse.getConnectedApplicationList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (connectedApplicationArray != null) {
 			if (connectedApplicationArray.length() > 0) {
 				Element xmlconnectedApplicationtype = doc.createElement("types");
@@ -349,9 +295,7 @@ public class MetadataResource {
 						xmlconnectedApplicationMembers.appendChild(
 								doc.createTextNode(connectedApplicationArray.getJSONObject(i).getString("Name")));
 						xmlconnectedApplicationtype.appendChild(xmlconnectedApplicationMembers);
-						ConnectedApplication ca = new ConnectedApplication();
-						ca.setName(connectedApplicationArray.getJSONObject(i).getString("Name"));
-						ConnectedApplicationList.add(ca);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -361,12 +305,14 @@ public class MetadataResource {
 				xmlconnectedApplicationtype.appendChild(xmlconnectedApplicationName);
 			}
 		}
-		return ConnectedApplicationList;
+
 	}
 
-	public List<CustomApplication> getCustomApplication(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<CustomApplication> CustomApplicationList = new ArrayList<CustomApplication>();
-		JSONArray customApplicationArray = DataWarehouse.getCustomApplicationList(loginObject, startdate, enddate,sfdcuserid);
+	public void getCustomApplication(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray customApplicationArray = DataWarehouse.getCustomApplicationList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (customApplicationArray != null) {
 			if (customApplicationArray.length() > 0) {
 				Element xmlcustomApplicationtype = doc.createElement("types");
@@ -377,9 +323,7 @@ public class MetadataResource {
 						xmlcustomApplicationMembers.appendChild(
 								doc.createTextNode(customApplicationArray.getJSONObject(i).getString("DeveloperName")));
 						xmlcustomApplicationtype.appendChild(xmlcustomApplicationMembers);
-						CustomApplication capp = new CustomApplication();
-						capp.setDeveloperName(customApplicationArray.getJSONObject(i).getString("DeveloperName"));
-						CustomApplicationList.add(capp);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -389,12 +333,13 @@ public class MetadataResource {
 				xmlcustomApplicationtype.appendChild(xmlcustomApplicationName);
 			}
 		}
-		return CustomApplicationList;
+
 	}
 
-	public List<CustomObject> getCustomObject(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<CustomObject> CustomObjectList = new ArrayList<CustomObject>();
-		JSONArray customobjectArray = DataWarehouse.getCustomObjectList(loginObject, startdate, enddate,sfdcuserid);
+	public void getCustomObject(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray customobjectArray = DataWarehouse.getCustomObjectList(loginObject, startdate, enddate, sfdcuserid);
 		if (customobjectArray != null) {
 			if (customobjectArray.length() > 0) {
 				Element xmlcustomobjecttype = doc.createElement("types");
@@ -405,9 +350,6 @@ public class MetadataResource {
 						xmlcustomobjectMembers.appendChild(doc
 								.createTextNode(customobjectArray.getJSONObject(i).getString("DeveloperName") + "__c"));
 						xmlcustomobjecttype.appendChild(xmlcustomobjectMembers);
-						CustomObject co = new CustomObject();
-						co.setDeveloperName(customobjectArray.getJSONObject(i).getString("DeveloperName") + "__c");
-						CustomObjectList.add(co);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -419,12 +361,13 @@ public class MetadataResource {
 				xmlcustomobjecttype.appendChild(xmlcustomobjectName);
 			}
 		}
-		return CustomObjectList;
+
 	}
 
-	public List<CustomField> getCustomField(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<CustomField> CustomFieldList = new ArrayList<CustomField>();
-		JSONArray customFieldArray = DataWarehouse.__getCustomFieldList(loginObject, startdate, enddate,sfdcuserid);
+	public void getCustomField(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray customFieldArray = DataWarehouse.__getCustomFieldList(loginObject, startdate, enddate, sfdcuserid);
 		if (customFieldArray != null) {
 			if (customFieldArray.length() > 0) {
 				Element xmlcustomfieldtype = doc.createElement("types");
@@ -444,10 +387,7 @@ public class MetadataResource {
 					xmlcustomfieldMembers.appendChild(doc.createTextNode(customObjectName + "."
 							+ customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c"));
 					xmlcustomfieldtype.appendChild(xmlcustomfieldMembers);
-					CustomField cf = new CustomField();
-					cf.setDeveloperName(customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c");
-					cf.setObjectName(customObjectName);
-					CustomFieldList.add(cf);
+
 				}
 
 				Element xmlcustomfieldName = doc.createElement("name");
@@ -455,12 +395,13 @@ public class MetadataResource {
 				xmlcustomfieldtype.appendChild(xmlcustomfieldName);
 			}
 		}
-		return CustomFieldList;
+
 	}
 
-	public List<CustomTab> getCustomTab(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<CustomTab> CustomTabList = new ArrayList<CustomTab>();
-		JSONArray customTabArray = DataWarehouse.getCustomTabList(loginObject, startdate, enddate,sfdcuserid);
+	public void getCustomTab(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray customTabArray = DataWarehouse.getCustomTabList(loginObject, startdate, enddate, sfdcuserid);
 		if (customTabArray != null) {
 			if (customTabArray.length() > 0) {
 				Element xmlcustomTabtype = doc.createElement("types");
@@ -474,10 +415,6 @@ public class MetadataResource {
 								doc.createTextNode(customTabFullname.getJSONObject(0).getString("FullName")));
 						xmlcustomTabtype.appendChild(xmlcustomTabMembers);
 
-						CustomTab ct = new CustomTab();
-						ct.setFullName(customTabFullname.getJSONObject(0).getString("FullName"));
-						CustomTabList.add(ct);
-
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -487,12 +424,13 @@ public class MetadataResource {
 				xmlcustomTabtype.appendChild(xmlcustomTabName);
 			}
 		}
-		return CustomTabList;
+
 	}
 
-	public List<Dashboard> getDashboard(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Dashboard> DashboardList = new ArrayList<Dashboard>();
-		JSONArray dashboardArray = DataWarehouse.getDashboardList(loginObject, startdate, enddate,sfdcuserid);
+	public void getDashboard(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray dashboardArray = DataWarehouse.getDashboardList(loginObject, startdate, enddate, sfdcuserid);
 		if (dashboardArray != null) {
 			if (dashboardArray.length() > 0) {
 				Element xmldashboardtype = doc.createElement("types");
@@ -504,9 +442,6 @@ public class MetadataResource {
 								doc.createTextNode(dashboardArray.getJSONObject(i).getString("DeveloperName")));
 						xmldashboardtype.appendChild(xmldashboardMembers);
 
-						Dashboard d = new Dashboard();
-						d.setDeveloperName(dashboardArray.getJSONObject(i).getString("DeveloperName"));
-						DashboardList.add(d);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -516,12 +451,13 @@ public class MetadataResource {
 				xmldashboardtype.appendChild(xmldashboardName);
 			}
 		}
-		return DashboardList;
+
 	}
 
-	public List<EmailTemplate> getEmailTemplate(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<EmailTemplate> EmailTemplateList = new ArrayList<EmailTemplate>();
-		JSONArray emailTemplateArray = DataWarehouse.getEmailTemplateList(loginObject, startdate, enddate,sfdcuserid);
+	public void getEmailTemplate(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray emailTemplateArray = DataWarehouse.getEmailTemplateList(loginObject, startdate, enddate, sfdcuserid);
 		if (emailTemplateArray != null) {
 			if (emailTemplateArray.length() > 0) {
 				Element xmlemailTemplateListtype = doc.createElement("types");
@@ -532,9 +468,6 @@ public class MetadataResource {
 						xmlemailTemplateListMembers
 								.appendChild(doc.createTextNode(emailTemplateArray.getJSONObject(i).getString("Name")));
 						xmlemailTemplateListtype.appendChild(xmlemailTemplateListMembers);
-						EmailTemplate et = new EmailTemplate();
-						et.setName(emailTemplateArray.getJSONObject(i).getString("Name"));
-						EmailTemplateList.add(et);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -545,13 +478,13 @@ public class MetadataResource {
 				xmlemailTemplateListtype.appendChild(xmlemailTemplateListName);
 			}
 		}
-		return EmailTemplateList;
 
 	}
 
-	public List<FieldSet> getFieldSet(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<FieldSet> FieldSetList = new ArrayList<FieldSet>();
-		JSONArray fieldSetArray = DataWarehouse.getFieldSetList(loginObject, startdate, enddate,sfdcuserid);
+	public void getFieldSet(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray fieldSetArray = DataWarehouse.getFieldSetList(loginObject, startdate, enddate, sfdcuserid);
 		if (fieldSetArray != null) {
 			if (fieldSetArray.length() > 0) {
 				Element xmlfieldSettype = doc.createElement("types");
@@ -562,9 +495,7 @@ public class MetadataResource {
 						xmlfieldSetMembers.appendChild(
 								doc.createTextNode(fieldSetArray.getJSONObject(i).getString("DeveloperName")));
 						xmlfieldSettype.appendChild(xmlfieldSetMembers);
-						FieldSet fs = new FieldSet();
-						fs.setDeveloperName(fieldSetArray.getJSONObject(i).getString("DeveloperName"));
-						FieldSetList.add(fs);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -574,13 +505,13 @@ public class MetadataResource {
 				xmlfieldSettype.appendChild(xmlxmlfieldSetName);
 			}
 		}
-		return FieldSetList;
 
 	}
 
-	public List<FlexiPage> getFlexiPage (JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<FlexiPage> FlexiPageList = new ArrayList<FlexiPage>();
-		JSONArray flexiPageArray = DataWarehouse.getFlexiPageList(loginObject, startdate, enddate,sfdcuserid);
+	public void getFlexiPage(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray flexiPageArray = DataWarehouse.getFlexiPageList(loginObject, startdate, enddate, sfdcuserid);
 		if (flexiPageArray != null) {
 			if (flexiPageArray.length() > 0) {
 				Element xmlflexiPageListtype = doc.createElement("types");
@@ -591,9 +522,6 @@ public class MetadataResource {
 						xmlflexiPageListMembers.appendChild(
 								doc.createTextNode(flexiPageArray.getJSONObject(i).getString("DeveloperName")));
 						xmlflexiPageListtype.appendChild(xmlflexiPageListMembers);
-						FlexiPage fp = new FlexiPage();
-						fp.setDeveloperName(flexiPageArray.getJSONObject(i).getString("DeveloperName"));
-						FlexiPageList.add(fp);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -604,13 +532,12 @@ public class MetadataResource {
 				xmlflexiPageListtype.appendChild(xmlflexiPageListName);
 			}
 		}
-		return FlexiPageList;
 
 	}
 
-	public List<Flow> getFlow(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Flow> FlowList = new ArrayList<Flow>();
-		JSONArray flowArray = DataWarehouse.getFlowList(loginObject, startdate, enddate,sfdcuserid);
+	public void getFlow(JSONObject loginObject, String sfdcuserid, String startdate, String enddate) throws Exception {
+
+		JSONArray flowArray = DataWarehouse.getFlowList(loginObject, startdate, enddate, sfdcuserid);
 		if (flowArray != null) {
 			if (flowArray.length() > 0) {
 				Element xmlflowtype = doc.createElement("types");
@@ -623,9 +550,6 @@ public class MetadataResource {
 						xmlflowMembers
 								.appendChild(doc.createTextNode(flowFullname.getJSONObject(0).getString("FullName")));
 						xmlflowtype.appendChild(xmlflowMembers);
-						Flow flow = new Flow();
-						flow.setFullName(flowFullname.getJSONObject(0).getString("FullName"));
-						FlowList.add(flow);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -636,13 +560,14 @@ public class MetadataResource {
 				xmlflowtype.appendChild(xmlflowName);
 			}
 		}
-		return FlowList;
 
 	}
 
-	public List<GlobalValueSet> getGlobalValueSet(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<GlobalValueSet> GlobalValueSetList = new ArrayList<GlobalValueSet>();
-		JSONArray globalValueSetArray = DataWarehouse.getGlobalValueSetList(loginObject, startdate, enddate,sfdcuserid);
+	public void getGlobalValueSet(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray globalValueSetArray = DataWarehouse.getGlobalValueSetList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (globalValueSetArray != null) {
 			if (globalValueSetArray.length() > 0) {
 				Element xmlglobalValueSettype = doc.createElement("types");
@@ -653,9 +578,6 @@ public class MetadataResource {
 						xmlglobalValueSetMembers.appendChild(
 								doc.createTextNode(globalValueSetArray.getJSONObject(i).getString("DeveloperName")));
 						xmlglobalValueSettype.appendChild(xmlglobalValueSetMembers);
-						GlobalValueSet gvs = new GlobalValueSet();
-						gvs.setDeveloperName(globalValueSetArray.getJSONObject(i).getString("DeveloperName"));
-						GlobalValueSetList.add(gvs);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -666,13 +588,13 @@ public class MetadataResource {
 				xmlglobalValueSettype.appendChild(xmlglobalValueSetName);
 			}
 		}
-		return GlobalValueSetList;
 
 	}
 
-	public List<HomePageLayout> getHomePageLayout(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<HomePageLayout> HomePageLayoutList = new ArrayList<HomePageLayout>();
-		JSONArray homePageLayoutArray = DataWarehouse.getHomePageLayoutList(loginObject, startdate, enddate,sfdcuserid);
+	public void getHomePageLayout(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+		JSONArray homePageLayoutArray = DataWarehouse.getHomePageLayoutList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (homePageLayoutArray != null) {
 			if (homePageLayoutArray.length() > 0) {
 				Element xmlhomePageLayouttype = doc.createElement("types");
@@ -683,9 +605,6 @@ public class MetadataResource {
 						xmlhomePageLayoutMembers.appendChild(
 								doc.createTextNode(homePageLayoutArray.getJSONObject(i).getString("Name")));
 						xmlhomePageLayouttype.appendChild(xmlhomePageLayoutMembers);
-						HomePageLayout hpl = new HomePageLayout();
-						hpl.setName(homePageLayoutArray.getJSONObject(i).getString("Name"));
-						HomePageLayoutList.add(hpl);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -696,12 +615,13 @@ public class MetadataResource {
 				xmlhomePageLayouttype.appendChild(xmlhomePageLayoutName);
 			}
 		}
-		return HomePageLayoutList;
+
 	}
 
-	public List<Layout> getLayout(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Layout> LayoutList = new ArrayList<Layout>();
-		JSONArray layoutArray = DataWarehouse.getLayoutList(loginObject, startdate, enddate,sfdcuserid);
+	public void getLayout(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray layoutArray = DataWarehouse.getLayoutList(loginObject, startdate, enddate, sfdcuserid);
 		if (layoutArray != null) {
 			if (layoutArray.length() > 0) {
 				Element xmlcustomfieldtype = doc.createElement("types");
@@ -720,10 +640,7 @@ public class MetadataResource {
 					xmlcustomfieldMembers.appendChild(doc
 							.createTextNode(customObjectName + "." + layoutArray.getJSONObject(j).getString("Name")));
 					xmlcustomfieldtype.appendChild(xmlcustomfieldMembers);
-					Layout layout = new Layout();
-					layout.setObjectName(customObjectName);
-					layout.setDeveloperName(layoutArray.getJSONObject(j).getString("Name"));
-					LayoutList.add(layout);
+
 				}
 
 				Element xmlcustomfieldName = doc.createElement("name");
@@ -731,13 +648,13 @@ public class MetadataResource {
 				xmlcustomfieldtype.appendChild(xmlcustomfieldName);
 			}
 		}
-		return LayoutList;
 
 	}
 
-	public List<Permission> getPermission(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Permission> PermissionList = new ArrayList<Permission>();
-		JSONArray permissionSetArray = DataWarehouse.getPermissionSetList(loginObject, startdate, enddate,sfdcuserid);
+	public void getPermission(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray permissionSetArray = DataWarehouse.getPermissionSetList(loginObject, startdate, enddate, sfdcuserid);
 		if (permissionSetArray != null) {
 			if (permissionSetArray.length() > 0) {
 				Element xmlpermissionSettype = doc.createElement("types");
@@ -749,9 +666,6 @@ public class MetadataResource {
 								.appendChild(doc.createTextNode(permissionSetArray.getJSONObject(i).getString("Name")));
 						xmlpermissionSettype.appendChild(xmlpermissionSetMembers);
 
-						Permission per = new Permission();
-						per.setName(permissionSetArray.getJSONObject(i).getString("Name"));
-						PermissionList.add(per);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -761,13 +675,13 @@ public class MetadataResource {
 				xmlpermissionSettype.appendChild(xmlpermissionSetName);
 			}
 		}
-		return PermissionList;
 
 	}
 
-	public List<Profile> getProfile(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Profile> ProfileList = new ArrayList<Profile>();
-		JSONArray profileArray = DataWarehouse.getProfileList(loginObject, startdate, enddate,sfdcuserid);
+	public void getProfile(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray profileArray = DataWarehouse.getProfileList(loginObject, startdate, enddate, sfdcuserid);
 		if (profileArray != null) {
 			if (profileArray.length() > 0) {
 				Element xmlprofiletype = doc.createElement("types");
@@ -778,9 +692,6 @@ public class MetadataResource {
 						xmlprofileMembers
 								.appendChild(doc.createTextNode(profileArray.getJSONObject(i).getString("Name")));
 						xmlprofiletype.appendChild(xmlprofileMembers);
-						Profile pro = new Profile();
-						pro.setName(profileArray.getJSONObject(i).getString("Name"));
-						ProfileList.add(pro);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -791,13 +702,13 @@ public class MetadataResource {
 				xmlprofiletype.appendChild(xmlprofileName);
 			}
 		}
-		return ProfileList;
 
 	}
 
-	public List<RecordType> getRecordType(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<RecordType> RecordTypeList = new ArrayList<RecordType>();
-		JSONArray recordTypeArray = DataWarehouse.getRecordTypeList(loginObject, startdate, enddate,sfdcuserid);
+	public void getRecordType(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray recordTypeArray = DataWarehouse.getRecordTypeList(loginObject, startdate, enddate, sfdcuserid);
 		if (recordTypeArray != null) {
 			if (recordTypeArray.length() > 0) {
 				Element xmlrecordTypetype = doc.createElement("types");
@@ -805,13 +716,10 @@ public class MetadataResource {
 				for (int i = 0; i < recordTypeArray.length(); i++) {
 					try {
 						Element xmlrecordTypeMembers = doc.createElement("members");
-						xmlrecordTypeMembers.appendChild(
-								doc.createTextNode(recordTypeArray.getJSONObject(i).getString("Name") ));
+						xmlrecordTypeMembers
+								.appendChild(doc.createTextNode(recordTypeArray.getJSONObject(i).getString("Name")));
 						xmlrecordTypetype.appendChild(xmlrecordTypeMembers);
 
-						RecordType rt = new RecordType();
-						rt.setName(recordTypeArray.getJSONObject(i).getString("Name"));
-						RecordTypeList.add(rt);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -822,13 +730,12 @@ public class MetadataResource {
 			}
 		}
 
-		return RecordTypeList;
-
 	}
 
-	public List<Report> getReport(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<Report> ReportList = new ArrayList<Report>();
-		JSONArray reportArray = DataWarehouse.getReportList(loginObject, startdate, enddate,sfdcuserid);
+	public void getReport(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray reportArray = DataWarehouse.getReportList(loginObject, startdate, enddate, sfdcuserid);
 		if (reportArray != null) {
 			if (reportArray.length() > 0) {
 				Element xmlreporttype = doc.createElement("types");
@@ -839,9 +746,7 @@ public class MetadataResource {
 						xmlreportMembers.appendChild(
 								doc.createTextNode(reportArray.getJSONObject(i).getString("DeveloperName")));
 						xmlreporttype.appendChild(xmlreportMembers);
-						Report report = new Report();
-						report.setDeveloperName(reportArray.getJSONObject(i).getString("DeveloperName"));
-						ReportList.add(report);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -851,13 +756,13 @@ public class MetadataResource {
 				xmlreporttype.appendChild(xmlreportName);
 			}
 		}
-		return ReportList;
 
 	}
 
-	public List<StaticResources> getStaticResources(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<StaticResources> StaticResourcesList = new ArrayList<StaticResources>();
-		JSONArray staticResourceArray = DataWarehouse.getStaticResourceList(loginObject, startdate, enddate,sfdcuserid);
+	public void getStaticResources(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+		JSONArray staticResourceArray = DataWarehouse.getStaticResourceList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (staticResourceArray != null) {
 			if (staticResourceArray.length() > 0) {
 				Element xmlstaticResourcetype = doc.createElement("types");
@@ -868,9 +773,7 @@ public class MetadataResource {
 						xmlstaticResourceMembers.appendChild(
 								doc.createTextNode(staticResourceArray.getJSONObject(i).getString("Name")));
 						xmlstaticResourcetype.appendChild(xmlstaticResourceMembers);
-						StaticResources sr = new StaticResources();
-						sr.setName(staticResourceArray.getJSONObject(i).getString("Name"));
-						StaticResourcesList.add(sr);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -880,13 +783,12 @@ public class MetadataResource {
 				xmlstaticResourcetype.appendChild(xmlstaticResourceName);
 			}
 		}
-		return StaticResourcesList;
 
 	}
 
-	public List<User> getUser(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<User> UserList = new ArrayList<User>();
-		JSONArray UserArray = DataWarehouse.getUserList(loginObject, startdate, enddate,sfdcuserid);
+	public void getUser(JSONObject loginObject, String sfdcuserid, String startdate, String enddate) throws Exception {
+
+		JSONArray UserArray = DataWarehouse.getUserList(loginObject, startdate, enddate, sfdcuserid);
 		if (UserArray != null) {
 			if (UserArray.length() > 0) {
 				Element xmlUserType = doc.createElement("types");
@@ -896,9 +798,7 @@ public class MetadataResource {
 						Element xmlUserMembers = doc.createElement("members");
 						xmlUserMembers.appendChild(doc.createTextNode(UserArray.getJSONObject(i).getString("Name")));
 						xmlUserType.appendChild(xmlUserMembers);
-						User usr = new User();
-						usr.setName(UserArray.getJSONObject(i).getString("Name"));
-						UserList.add(usr);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -908,13 +808,14 @@ public class MetadataResource {
 				xmlUserType.appendChild(xmlUserName);
 			}
 		}
-		return UserList;
 
 	}
 
-	public List<ValidationRule> getValidationRule(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<ValidationRule> ValidationRuleList = new ArrayList<ValidationRule>();
-		JSONArray validationRuleArray = DataWarehouse.getValidationRuleList(loginObject, startdate, enddate,sfdcuserid);
+	public void getValidationRule(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray validationRuleArray = DataWarehouse.getValidationRuleList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (validationRuleArray != null) {
 			if (validationRuleArray.length() > 0) {
 				Element xmlvalidationRuletype = doc.createElement("types");
@@ -926,9 +827,7 @@ public class MetadataResource {
 						Element xmlvalidationRuleMembers = doc.createElement("members");
 						xmlvalidationRuleMembers.appendChild(doc.createTextNode(objectname));
 						xmlvalidationRuletype.appendChild(xmlvalidationRuleMembers);
-						ValidationRule vr = new ValidationRule();
-						vr.setName(objectname);
-						ValidationRuleList.add(vr);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -938,13 +837,13 @@ public class MetadataResource {
 				xmlvalidationRuletype.appendChild(xmlvalidationRuleName);
 			}
 		}
-		return ValidationRuleList;
 
 	}
 
-	public List<WebLink> getWebLink(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<WebLink> WebLinkList = new ArrayList<WebLink>();
-		JSONArray WebLinArray = DataWarehouse.geWebLinkList(loginObject, startdate, enddate,sfdcuserid);
+	public void getWebLink(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray WebLinArray = DataWarehouse.geWebLinkList(loginObject, startdate, enddate, sfdcuserid);
 		if (WebLinArray != null) {
 			if (WebLinArray.length() > 0) {
 				Element xmlWebLinkType = doc.createElement("types");
@@ -955,9 +854,7 @@ public class MetadataResource {
 						xmlWebLinkMembers
 								.appendChild(doc.createTextNode(WebLinArray.getJSONObject(i).getString("Name")));
 						xmlWebLinkType.appendChild(xmlWebLinkMembers);
-						WebLink weblink = new WebLink();
-						weblink.setName(WebLinArray.getJSONObject(i).getString("Name"));
-						WebLinkList.add(weblink);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -967,12 +864,13 @@ public class MetadataResource {
 				xmlWebLinkType.appendChild(xmlWebLinkName);
 			}
 		}
-		return WebLinkList;
+
 	}
 
-	public List<WorkFlowAlert> getWorkFlowAlert(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<WorkFlowAlert> WorkFlowAlertList = new ArrayList<WorkFlowAlert>();
-		JSONArray objWorkFlowAlert = DataWarehouse.getWorkflowAlertList(loginObject, startdate, enddate,sfdcuserid);
+	public void getWorkFlowAlert(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray objWorkFlowAlert = DataWarehouse.getWorkflowAlertList(loginObject, startdate, enddate, sfdcuserid);
 		if (objWorkFlowAlert != null) {
 			if (objWorkFlowAlert.length() > 0) {
 				Element xmlobjWorkFlowAlerttype = doc.createElement("types");
@@ -985,9 +883,7 @@ public class MetadataResource {
 						xmlobjworkFlowAlertMembers.appendChild(
 								doc.createTextNode(jsonworkflowaler.getJSONObject(0).getString("FullName")));
 						xmlobjWorkFlowAlerttype.appendChild(xmlobjworkFlowAlertMembers);
-						WorkFlowAlert workflowalert = new WorkFlowAlert();
-						workflowalert.setFullName(jsonworkflowaler.getJSONObject(0).getString("FullName"));
-						WorkFlowAlertList.add(workflowalert);
+
 					}
 					Element xmlobjWorkFlowAlertName = doc.createElement("name");
 					xmlobjWorkFlowAlertName.appendChild(doc.createTextNode("WorkFlowAlert"));
@@ -997,12 +893,14 @@ public class MetadataResource {
 				}
 			}
 		}
-		return WorkFlowAlertList;
+
 	}
 
-	public List<WorkFlowFieldUpdate> getWorkFlowFieldUpdate(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<WorkFlowFieldUpdate> WorkFlowFieldUpdateList = new ArrayList<WorkFlowFieldUpdate>();
-		JSONArray workflowFieldUpdateArray = DataWarehouse.getWorkflowFieldUpdateList(loginObject, startdate, enddate,sfdcuserid);
+	public void getWorkFlowFieldUpdate(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray workflowFieldUpdateArray = DataWarehouse.getWorkflowFieldUpdateList(loginObject, startdate, enddate,
+				sfdcuserid);
 		if (workflowFieldUpdateArray != null) {
 			if (workflowFieldUpdateArray.length() > 0) {
 				Element xmlworkflowFieldUpdatetype = doc.createElement("types");
@@ -1014,11 +912,7 @@ public class MetadataResource {
 								workflowFieldUpdateArray.getJSONObject(i).getString("SourceTableEnumOrId") + "."
 										+ workflowFieldUpdateArray.getJSONObject(i).getString("Name")));
 						xmlworkflowFieldUpdatetype.appendChild(xmlworkflowFieldUpdateMembers);
-						WorkFlowFieldUpdate workFlowFieldUpdate = new WorkFlowFieldUpdate();
-						workFlowFieldUpdate.setName(workflowFieldUpdateArray.getJSONObject(i).getString("Name"));
-						workFlowFieldUpdate.setSourceTableEnumOrId(
-								workflowFieldUpdateArray.getJSONObject(i).getString("SourceTableEnumOrId"));
-						WorkFlowFieldUpdateList.add(workFlowFieldUpdate);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1028,12 +922,13 @@ public class MetadataResource {
 				xmlworkflowFieldUpdatetype.appendChild(xmlworkflowFieldUpdateName);
 			}
 		}
-		return WorkFlowFieldUpdateList;
+
 	}
 
-	public List<WorkFlowRule> getWorkFlowRule(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<WorkFlowRule> WorkFlowRuleList = new ArrayList<WorkFlowRule>();
-		JSONArray workflowRuleList = DataWarehouse.getWorkflowRuleList(loginObject, startdate, enddate,sfdcuserid);
+	public void getWorkFlowRule(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray workflowRuleList = DataWarehouse.getWorkflowRuleList(loginObject, startdate, enddate, sfdcuserid);
 		if (workflowRuleList != null) {
 			if (workflowRuleList.length() > 0) {
 				Element xmlworkflowRuletype = doc.createElement("types");
@@ -1045,10 +940,7 @@ public class MetadataResource {
 								doc.createTextNode(workflowRuleList.getJSONObject(i).getString("TableEnumOrId") + "."
 										+ workflowRuleList.getJSONObject(i).getString("Name")));
 						xmlworkflowRuletype.appendChild(xmlworkflowRuleMembers);
-						WorkFlowRule wfr = new WorkFlowRule();
-						wfr.setName(workflowRuleList.getJSONObject(i).getString("Name"));
-						wfr.setTableEnumOrId(workflowRuleList.getJSONObject(i).getString("TableEnumOrId"));
-						WorkFlowRuleList.add(wfr);
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1058,12 +950,13 @@ public class MetadataResource {
 				xmlworkflowRuletype.appendChild(xmlworkflowRuleName);
 			}
 		}
-		return WorkFlowRuleList;
+
 	}
 
-	public List<WorkFlowTask> getWorkFlowTask(JSONObject loginObject,String sfdcuserid,String startdate,String enddate) throws Exception {
-		List<WorkFlowTask> WorkFlowTaskList = new ArrayList<WorkFlowTask>();
-		JSONArray objWorkFlowTask = DataWarehouse.getWorkflowTaskList(loginObject, startdate, enddate,sfdcuserid);
+	public void getWorkFlowTask(JSONObject loginObject, String sfdcuserid, String startdate, String enddate)
+			throws Exception {
+
+		JSONArray objWorkFlowTask = DataWarehouse.getWorkflowTaskList(loginObject, startdate, enddate, sfdcuserid);
 		if (objWorkFlowTask != null) {
 			if (objWorkFlowTask.length() > 0) {
 				Element xmlobjWorkFlowTasktype = doc.createElement("types");
@@ -1076,9 +969,7 @@ public class MetadataResource {
 						xmlobjWorkFlowTaskMembers.appendChild(
 								doc.createTextNode(jsonworkflowaler.getJSONObject(0).getString("FullName")));
 						xmlobjWorkFlowTasktype.appendChild(xmlobjWorkFlowTaskMembers);
-						WorkFlowTask workflowtask = new WorkFlowTask();
-						workflowtask.setFullName(jsonworkflowaler.getJSONObject(0).getString("FullName"));
-						WorkFlowTaskList.add(workflowtask);
+
 					}
 					Element xmlobjWorkFlowTaskName = doc.createElement("name");
 					xmlobjWorkFlowTaskName.appendChild(doc.createTextNode("WorkFlowTask"));
@@ -1088,11 +979,12 @@ public class MetadataResource {
 				}
 			}
 		}
-		return WorkFlowTaskList;
+
 	}
 
 	public File saveXml() throws TransformerException {
-		File file = XmlDocumetRes.xmlDocEnd(doc,xmlroot);
+		
+		File file = XmlDocumetRes.xmlDocEnd(doc, xmlroot);
 		return file;
 	}
 }

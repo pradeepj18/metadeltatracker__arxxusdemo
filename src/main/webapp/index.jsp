@@ -328,17 +328,17 @@
 				alert("Select atleast one Object");
 				return;
 			}
-			window.proxy = 'https://cors-anywhere.herokuapp.com/';
+			//window.proxy = 'https://cors-anywhere.herokuapp.com/';
 			$
 					.ajax({
-						method : "GET",
-					//	crossDomain : true,
-						url : proxy+"https://sfdcmetadatapsql.herokuapp.com/metadataresources/sfdcmetadataPSQL/",
-						data : ({
-							sfdcuserid : userid,
-						}),
-
-					//	dataType : 'jsonp',
+						method : "POST",
+						url : "metadataresources/sfdcmetadataPSQL/",
+						data : (
+							JSON.stringify(userid)
+						),
+						traditional: true,
+						dataType : 'json',
+						contentType: 'application/json',
 						async : true,
 						cache : true,
 						beforeSend : function() {
@@ -351,8 +351,7 @@
 								temptimeout = setInterval(function() {
 									getfinaldata(userid)
 								}, 10000);
-								callmeatdata(userid, sdate, edate, metaobj,
-										logintoken);
+								callmeatdata(userid, sdate, edate, metaobj,logintoken);
 							} else if (parseInt(xhr.responseText) === 422) { // remove it after testing
 								document.getElementById("loader").style.display = "none";
 								document.getElementById("procmsg").style.display = "none";
@@ -372,18 +371,18 @@
 		function callmeatdata(userid, sdate, edate, metaobj, logintoken) {
 			$
 					.ajax({
-						method : "GET",
-					//	crossDomain : true,
-						url : proxy+"https://sfdcmetadatapsql.herokuapp.com/metadataresources/callheroku/",
-						data : ({
+						method : "POST",
+						url : "metadataresources/callheroku/",
+						data : (JSON.stringify({
 							sfdcuserid : userid,
 							startdate : sdate,
 							enddate : edate,
 							metadata : metaobj,
-							logintoken : logintoken,
-						}),
-
-					//	dataType : 'jsonp',
+							logintoken : logintoken})
+						),
+						traditional: true,
+						dataType : 'json',
+						contentType: 'application/json',
 						async : true,
 						cache : true,
 						beforeSend : function() {
@@ -396,10 +395,7 @@
 								$("#senddatabutton").prop('disabled', false);
 								alert("Metadata not found");
 								clearInterval(temptimeout);
-							} /*  else if (xhr.responseText === "200") {
-														$("#senddatabutton").prop('disabled', false);
-														getfinaldata(userid,sdate);
-													}   */
+							}
 						},
 						success : function(result, status, xhr) {
 						}
@@ -407,20 +403,13 @@
 		}
 
 		function getfinaldata(userid) {
-			/* var userid1 = document.getElementById("sfdcuserid").value;
-			if (userid != userid1.split("##")[1]) {
-				alert("Please select correct User");
-				return;
-			} */
 			$
 					.ajax({
 						method : "GET",
-					//	crossDomain : true,
-						url :proxy+ "https://sfdcmetadatapsql.herokuapp.com/metadataresources/herokuDB/getfinaldata/",
+						url :"metadataresources/herokuDB/getfinaldata/",
 						data : ({
 							sfdcuserid : userid,
 						}),
-						//dataType : 'jsonp',
 						async : false,
 						cache : true,
 						beforeSend : function() {

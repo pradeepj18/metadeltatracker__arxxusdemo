@@ -1,15 +1,19 @@
 package repository;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.GET;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import credentials.DBManager;
 import credentials.RestLogin;
 import metadataResources.MetadataResource;
 
@@ -18,20 +22,48 @@ public class CallMetadata {
 
 	MetadataResource metadataResource = new MetadataResource();
 
-	@GET
-	@Produces({ MediaType.TEXT_PLAIN })
-	public Response getdata(@QueryParam("metadata[]") List<String> classnames,
-			@QueryParam("sfdcuserid") String sfdcuserid_usrname, @QueryParam("startdate") String startdate,
-			@QueryParam("enddate") String enddate, @QueryParam("logintoken[]") List<String> logintoken)
-			throws Exception {
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getdata(String inputarray)throws Exception {
 		System.out.println("calling callheroku");
-		String sfdcuserid = sfdcuserid_usrname.split("##")[0];
-		String sfdcusername = sfdcuserid_usrname.split("##")[1];
+		
+		List<String> classnames = new ArrayList<String>();
+		List<String> logintoken = new ArrayList<String>();
+		
+		JSONObject jsonobject = new JSONObject(inputarray);
+		
+		String sfdcuserid = jsonobject.getString("sfdcuserid").split("##")[0];
+		String sfdcusername = jsonobject.getString("sfdcuserid").split("##")[1];
+		String startdate = jsonobject.getString("startdate");
+		String enddate = jsonobject.getString("enddate");
+		
+		JSONArray metadataarray =  jsonobject.getJSONArray("metadata");
+		for(int i = 0; i < metadataarray.length(); i++){
+			classnames.add(metadataarray.getString(i));
+		}
+		
+		JSONArray logintokenarray =  jsonobject.getJSONArray("logintoken");
+		for(int i = 0; i < logintokenarray.length(); i++){
+			logintoken.add(logintokenarray.getString(i));
+		}
+		
+		
+		System.out.println("sfdcuserid - "+sfdcuserid);
+		System.out.println("sfdcusername - "+sfdcusername);
+		System.out.println("sdate - "+startdate);
+		System.out.println("edate - "+enddate);
+		System.out.println("metaobj - "+classnames);
+		System.out.println("logintoken - "+logintoken);
+		
 		JSONObject loginobject = new JSONObject();
 		if (logintoken.size() != 0) {
 			loginobject.put("instance_url", logintoken.get(0));
-			loginobject.put("access_token", logintoken.get(1) + logintoken.get(2));
+			loginobject.put("access_token", logintoken.get(1));
 		} 
+		else
+		{
+			loginobject = RestLogin.GetLoginObject();
+		}
 		StringBuffer sdate = new StringBuffer();
 		sdate.append(startdate);
 		sdate.append("T00:00:00.000Z");
@@ -40,7 +72,9 @@ public class CallMetadata {
 		edate.append(enddate);
 		edate.append("T23:59:59.000Z");
 		for (int i = 0; i < classnames.size(); i++) {
+			
 			switch (Integer.parseInt(classnames.get(i))) {
+			
 			case 101:
 				metadataResource.getApexClasses(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
@@ -92,10 +126,6 @@ public class CallMetadata {
 			case 117:
 				metadataResource.getFieldSet(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			/*
-			 * case 118: metadataResource.getFlexiPage(loginobject, sfdcuserid,
-			 * sdate.toString(), edate.toString()); break;
-			 */
 			case 119:
 				metadataResource.getFlow(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
@@ -146,6 +176,7 @@ public class CallMetadata {
 				break;
 			}
 		}
+		System.out.println("file---");
 		File file = metadataResource.saveXml();
 		if (file != null) {
 			@SuppressWarnings("deprecation")
@@ -153,6 +184,7 @@ public class CallMetadata {
 			JSONObject jsonmetadata = org.json.XML.toJSONObject(xml);
 			if (PsqlDataHouse.setMetadataObjtoDB(sfdcusername, jsonmetadata) != 0) {
 				System.out.println("JSON - created");
+				DBManager.deleteFiles(file);
 				return Response.status(200).entity("200").build();// Metadata process complete,now you can download xml file
 			} else {
 				return Response.status(200).entity("204").build();
