@@ -271,9 +271,6 @@
 			<div style="display: none" class="my-pre-loader" id="loader"
 				title="Processing metadata"></div>
 			<div class="red-text" id="procmsg">Processing Metadata</div>
-			<!-- <button class="btn waves-effect waves-light teal right"
-				id="getdatabutton" onclick="getfinaldata();" disabled>Download
-				file</button> -->
 		</div>
 	</div>
 	<script type="text/javascript">

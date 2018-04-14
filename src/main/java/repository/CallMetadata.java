@@ -9,6 +9,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,12 +60,15 @@ public class CallMetadata {
 		JSONObject loginobject = new JSONObject();
 		if (logintoken.size() != 0) {
 			loginobject.put("instance_url", logintoken.get(0));
-			loginobject.put("access_token", logintoken.get(1));
+			byte [] decode = Base64.decodeBase64(logintoken.get(1));
+			String access_tiken = new String (decode);
+			loginobject.put("access_token", access_tiken);
+			
 		} 
-		else
+		/*else
 		{
 			loginobject = RestLogin.GetLoginObject();
-		}
+		}*/
 		StringBuffer sdate = new StringBuffer();
 		sdate.append(startdate);
 		sdate.append("T00:00:00.000Z");
