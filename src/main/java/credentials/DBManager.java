@@ -10,10 +10,6 @@ public class DBManager {
 	static Statement stmt;
 	static ResultSet rs;
 
-	/*
-	 * create type checkstatus as enum('true','false'); create table sfdcmetadata
-	 * (datakey varchar(100),entrydate timestamp,metadata text,status checkstatus);
-	 */
 
 	public static Connection loadDriver() throws URISyntaxException, SQLException {
 		URI dbUri = new URI(System.getenv("DATABASE_URL"));
@@ -49,7 +45,6 @@ public class DBManager {
 
 	public static int CreUpDel(String query) {
 		try {
-			System.out.println("---"+query);
 			stmt = con.createStatement();
 			int rowAffected = stmt.executeUpdate(query);
 			if (rowAffected > 0)

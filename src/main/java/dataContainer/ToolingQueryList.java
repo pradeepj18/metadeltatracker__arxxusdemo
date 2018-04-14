@@ -169,7 +169,6 @@ public class ToolingQueryList {
 						+ startdate + "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+Name+asc";
 
 			} else if (startdate.equalsIgnoreCase("") || startdate == null) {
-				System.out.println("start date null query printed");
 				return "select+Id,Name,CreatedById,LastModifiedDate+from+" + objectName + "+where+LastModifiedDate%3E"
 						+ enddate + "+and+LastModifiedById%3D'" + SFDCUserID + "'+order+by+Name+asc";
 			} else {
