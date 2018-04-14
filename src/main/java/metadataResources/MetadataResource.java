@@ -216,7 +216,7 @@ public class MetadataResource {
 				}
 
 				Element xmlautoResponseListName = doc.createElement("name");
-				xmlautoResponseListName.appendChild(doc.createTextNode("ApexComponent"));// Make it dynamic
+				xmlautoResponseListName.appendChild(doc.createTextNode("AutoResponseRule"));
 				xmlautoResponseListtype.appendChild(xmlautoResponseListName);
 			}
 		}
@@ -644,7 +644,7 @@ public class MetadataResource {
 				}
 
 				Element xmlcustomfieldName = doc.createElement("name");
-				xmlcustomfieldName.appendChild(doc.createTextNode("Layout"));// Make it dynamic
+				xmlcustomfieldName.appendChild(doc.createTextNode("Layout"));
 				xmlcustomfieldtype.appendChild(xmlcustomfieldName);
 			}
 		}

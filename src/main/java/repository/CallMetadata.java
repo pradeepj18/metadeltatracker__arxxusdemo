@@ -9,14 +9,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import credentials.DBManager;
-import credentials.RestLogin;
 import metadataResources.MetadataResource;
 
 @Path("callheroku")
@@ -84,10 +81,10 @@ public class CallMetadata {
 			case 101:
 				metadataResource.getApexClasses(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			case 103:
+			case 102:
 				metadataResource.getApexPages(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
-			case 102:
+			case 103:
 				metadataResource.getApexComponents(loginobject, sfdcuserid, sdate.toString(), edate.toString());
 				break;
 			case 104:
@@ -182,7 +179,6 @@ public class CallMetadata {
 				break;
 			}
 		}
-		System.out.println("file---");
 		File file = metadataResource.saveXml();
 		if (file != null) {
 			@SuppressWarnings("deprecation")

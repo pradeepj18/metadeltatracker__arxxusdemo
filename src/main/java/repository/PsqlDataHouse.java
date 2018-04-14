@@ -36,8 +36,8 @@ public class PsqlDataHouse {
 	public static int setMetadataObjtoDB(String sfdcusername, JSONObject jsonobject) {
 		try {
 			DBManager.loadDriver();
-		
-			int row = DBManager.CreUpDel("update sfdcmetadata set metadata ='" + jsonobject
+			String jsondata = jsonobject.toString().replaceAll("\'","");
+			int row = DBManager.CreUpDel("update sfdcmetadata set metadata ='" + jsondata
 					+ "',status='true' where datakey='" + sfdcusername + "' and status='false'");
 			DBManager.close();
 			if (row > 0)

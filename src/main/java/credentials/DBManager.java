@@ -49,6 +49,7 @@ public class DBManager {
 
 	public static int CreUpDel(String query) {
 		try {
+			System.out.println("---"+query);
 			stmt = con.createStatement();
 			int rowAffected = stmt.executeUpdate(query);
 			if (rowAffected > 0)
@@ -56,7 +57,7 @@ public class DBManager {
 		}
 
 		catch (Exception e) {
-			System.out.println("Exception in DBManager....for CreUpDel.." + e);
+			System.out.println("Exception in DBManager....for CreUpDel.." + e.getMessage());
 		}
 		return 0;
 	}

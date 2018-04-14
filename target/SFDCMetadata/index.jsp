@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.codec.binary.Base64"%>
 <%@page import="dataContainer.DataWarehouse"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="org.json.JSONObject"%>
@@ -37,8 +38,15 @@
 				<select name="sfdcuserid" id="sfdcuserid" required>
 
 					<%
-						JSONObject loginObject = RestLogin.GetLoginObject();
-						JSONArray UserArray = DataWarehouse.getUserCred(loginObject);
+					//	JSONObject loginObject = RestLogin.GetLoginObject();
+					JSONObject loginObject = new JSONObject();
+					loginObject.put("instance_url", "https://playful-raccoon-370173-dev-ed.my.salesforce.com");
+					byte [] decode = Base64.decodeBase64("MEQxTjAwMDAwMWhkQ00hQVEwQVFENV9wQlMxbkdGTFR3UDJuX19jbTcxeHdIWlpFWUFJcmlXRmhfM2RUTmJSWlBuQW4yN0Y3UGU4WHhpa0dYWmxTdXlSVUY4YXIwNHp3VkpMS1JoWlZxWDJzSktp");
+					String access_token = new String (decode);
+					System.out.println("decode  - "+access_token);
+					loginObject.put("access_token", access_token);
+					
+					JSONArray UserArray = DataWarehouse.getUserCred(loginObject);
 					%>
 					<option value="##info.mca">---All Users---</option>
 					<%
@@ -72,12 +80,12 @@
 					</label>
 				</p>
 				<p>
-					<label> <input type="checkbox" name="metadata" value="102" />
+					<label> <input type="checkbox" name="metadata" value="103" />
 						<span>Apex Component </span>
 					</label>
 				</p>
 				<p>
-					<label> <input type="checkbox" name="metadata" value="103" />
+					<label> <input type="checkbox" name="metadata" value="102" />
 						<span>Apex Page</span>
 					</label>
 				</p>
@@ -366,6 +374,9 @@
 					});
 		}
 		function callmeatdata(userid, sdate, edate, metaobj, logintoken) {
+			 var log = [];
+             log.push('https://playful-raccoon-370173-dev-ed.my.salesforce.com');
+             log.push('MEQxTjAwMDAwMWhkQ00hQVEwQVFENV9wQlMxbkdGTFR3UDJuX19jbTcxeHdIWlpFWUFJcmlXRmhfM2RUTmJSWlBuQW4yN0Y3UGU4WHhpa0dYWmxTdXlSVUY4YXIwNHp3VkpMS1JoWlZxWDJzSktp');
 			$
 					.ajax({
 						method : "POST",
@@ -375,7 +386,7 @@
 							startdate : sdate,
 							enddate : edate,
 							metadata : metaobj,
-							logintoken : logintoken})
+							logintoken : log})
 						),
 						traditional: true,
 						dataType : 'json',
