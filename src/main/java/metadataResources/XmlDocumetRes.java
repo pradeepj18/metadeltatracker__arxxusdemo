@@ -25,7 +25,7 @@ public class XmlDocumetRes {
 			attrType.setValue("http://soap.sforce.com/2006/04/metadata");
 			xmlroot.setAttributeNode(attrType);*/
 			try {
-			targetFile = new File("E:\\IPL2018\\metadataTrack\\metadataxml\\metadata_"
+			targetFile = new File("/app/metadataxml/metadata_"
 					+ (new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(new Date()).toString()) + ".xml");
 			StreamResult result = new StreamResult(targetFile);
 			transformer.transform(source, result);
