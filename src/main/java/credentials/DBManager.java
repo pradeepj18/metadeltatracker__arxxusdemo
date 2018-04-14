@@ -76,7 +76,6 @@ public class DBManager {
 	public static void deleteFiles(File file) {
 		try {
 			if (file.exists()) {
-
 				file.delete();
 			}
 			else {System.out.println("not");}
