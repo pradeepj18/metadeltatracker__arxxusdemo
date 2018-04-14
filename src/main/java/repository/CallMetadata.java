@@ -57,10 +57,10 @@ public class CallMetadata {
 		JSONObject loginobject = new JSONObject();
 		if (logintoken.size() != 0) {
 			loginobject.put("instance_url", logintoken.get(0));
-			byte [] decode = Base64.decodeBase64(logintoken.get(1));
-			String access_token = new String (decode);
-			System.out.println("decode  - "+access_token);
-			loginobject.put("access_token", access_token);
+			//byte [] decode = Base64.decodeBase64(logintoken.get(1));
+		//	String access_token = new String (decode);
+		//	System.out.println("decode  - "+access_token);
+			loginobject.put("access_token", logintoken.get(1));
 			
 		} 
 		/*else
