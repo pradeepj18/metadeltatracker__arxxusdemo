@@ -38,14 +38,14 @@
 				<select name="sfdcuserid" id="sfdcuserid" required>
 
 					<%
-					//	JSONObject loginObject = RestLogin.GetLoginObject();
-					JSONObject loginObject = new JSONObject();
+						JSONObject loginObject = RestLogin.GetLoginObject();
+					/* JSONObject loginObject = new JSONObject();
 					loginObject.put("instance_url", "https://playful-raccoon-370173-dev-ed.my.salesforce.com");
 					byte [] decode = Base64.decodeBase64("MEQxTjAwMDAwMWhkQ00hQVEwQVFENV9wQlMxbkdGTFR3UDJuX19jbTcxeHdIWlpFWUFJcmlXRmhfM2RUTmJSWlBuQW4yN0Y3UGU4WHhpa0dYWmxTdXlSVUY4YXIwNHp3VkpMS1JoWlZxWDJzSktp");
 					String access_token = new String (decode);
 					System.out.println("decode  - "+access_token);
 					loginObject.put("access_token", access_token);
-					
+					 */
 					JSONArray UserArray = DataWarehouse.getUserCred(loginObject);
 					%>
 					<option value="##info.mca">---All Users---</option>
