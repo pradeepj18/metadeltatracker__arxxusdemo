@@ -19,15 +19,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<!-- Run the application using "mvn embedded-glassfish:run" -->
-			<!-- <plugin> <groupId>org.glassfish</groupId> <artifactId>maven-embedded-glassfish-plugin</artifactId> 
-				<version>${glassfish.version}</version> <configuration> <goalPrefix>embedded-glassfish</goalPrefix> 
-				<app>E:/SpringWorkspace/target/${project.build.finalName}.war</app> <autoDelete>true</autoDelete> 
-				<port>8080</port> </configuration> <dependencies> <dependency> <groupId>com.sun.jersey</groupId> 
-				<artifactId>jersey-servlet</artifactId> <version>${project.version}</version> 
-				</dependency> <dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId> 
-				<version>3.0.1</version> </dependency> </dependencies> </plugin> -->
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -70,11 +61,6 @@
 			<version>20180130</version>
 		</dependency>
 		<dependency>
-    <groupId>com.googlecode.json-simple</groupId>
-    <artifactId>json-simple</artifactId>
-    <version>1.1</version>
-</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.5</version>
@@ -111,17 +97,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.19.4</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>1.19.4</version>
 			<scope>test</scope>
@@ -131,8 +106,6 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.2</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.glassfish.extras</groupId> <artifactId>glassfish-embedded-web</artifactId> 
-			<version>${glassfish.version}</version> <scope>test</scope> </dependency> -->
 	</dependencies>
 	<properties>
 		<jersey.version>1.20-SNAPSHOT</jersey.version>

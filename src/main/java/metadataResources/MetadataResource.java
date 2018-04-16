@@ -160,7 +160,7 @@ public class MetadataResource {
 					}
 				}
 				Element xmlassignmentRuleName = doc.createElement("name");
-				xmlassignmentRuleName.appendChild(doc.createTextNode("AssignmentRule"));// Make it dynamic
+				xmlassignmentRuleName.appendChild(doc.createTextNode("AssignmentRule"));
 				xmlassignmentRuletype.appendChild(xmlassignmentRuleName);
 			}
 		}
@@ -244,7 +244,7 @@ public class MetadataResource {
 					}
 				}
 				Element xmlbusinessProcessName = doc.createElement("name");
-				xmlbusinessProcessName.appendChild(doc.createTextNode("BusinessProcess"));// Make it dynamic
+				xmlbusinessProcessName.appendChild(doc.createTextNode("BusinessProcess"));
 				xmlbusinessProcesstype.appendChild(xmlbusinessProcessName);
 			}
 		}
@@ -273,7 +273,7 @@ public class MetadataResource {
 					}
 				}
 				Element xmlcompactLayoutName = doc.createElement("name");
-				xmlcompactLayoutName.appendChild(doc.createTextNode("CompactLayout"));// Make it dynamic
+				xmlcompactLayoutName.appendChild(doc.createTextNode("CompactLayout"));
 				xmlcompactLayouttype.appendChild(xmlcompactLayoutName);
 			}
 		}
@@ -301,7 +301,7 @@ public class MetadataResource {
 					}
 				}
 				Element xmlconnectedApplicationName = doc.createElement("name");
-				xmlconnectedApplicationName.appendChild(doc.createTextNode("ConnectedApplication"));// Make it dynamic
+				xmlconnectedApplicationName.appendChild(doc.createTextNode("ConnectedApplication"));
 				xmlconnectedApplicationtype.appendChild(xmlconnectedApplicationName);
 			}
 		}
@@ -329,7 +329,7 @@ public class MetadataResource {
 					}
 				}
 				Element xmlcustomApplicationName = doc.createElement("name");
-				xmlcustomApplicationName.appendChild(doc.createTextNode("CustomApplication"));// Make it dynamic
+				xmlcustomApplicationName.appendChild(doc.createTextNode("CustomApplication"));
 				xmlcustomApplicationtype.appendChild(xmlcustomApplicationName);
 			}
 		}
@@ -382,7 +382,7 @@ public class MetadataResource {
 								customFieldArray.getJSONObject(j).getString("TableEnumOrId"));
 						customObjectName += "__c";
 					}
-					System.out.println(customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c");
+				
 					Element xmlcustomfieldMembers = doc.createElement("members");
 					xmlcustomfieldMembers.appendChild(doc.createTextNode(customObjectName + "."
 							+ customFieldArray.getJSONObject(j).getString("DeveloperName") + "__c"));

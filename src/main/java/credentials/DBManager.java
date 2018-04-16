@@ -64,7 +64,7 @@ public class DBManager {
 		}
 
 		catch (Exception e) {
-			System.out.println("Exception in DBManager....for CreUpDel.." + e.getMessage());
+			System.out.println("Exception in DBManager....for close.." + e.getMessage());
 		}
 	}
 

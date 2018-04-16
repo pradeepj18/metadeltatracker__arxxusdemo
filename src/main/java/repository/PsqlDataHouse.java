@@ -28,6 +28,7 @@ public class PsqlDataHouse {
 				return row;
 
 		} catch (URISyntaxException | SQLException e) {
+			DBManager.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -44,6 +45,7 @@ public class PsqlDataHouse {
 				return row;
 
 		} catch (URISyntaxException | SQLException e) {
+			DBManager.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -58,6 +60,7 @@ public class PsqlDataHouse {
 				return row;
 
 		} catch (URISyntaxException | SQLException e) {
+			DBManager.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -71,6 +74,7 @@ public class PsqlDataHouse {
 				return row;
 
 		} catch (URISyntaxException | SQLException e) {
+			DBManager.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -85,17 +89,19 @@ public class PsqlDataHouse {
 		try {
 			DBManager.loadDriver();
 			ResultSet result = DBManager
-					.fetchQuery("select * from sfdcmetadata where datakey='" + sfdcusername + "' and status='true' order by entrydate desc");
+					.fetchQuery("select metadata from sfdcmetadata where datakey='" + sfdcusername + "' and status='true' order by entrydate desc");
 			if (result.next()) {
 				org.json.JSONObject jsonFileObject = new org.json.JSONObject(result.getString("metadata"));
 				String xml = org.json.XML.toString(jsonFileObject);
 				DBManager.close();
 				return Response.status(200).entity(xml).build();
 			} else {
+				DBManager.close();
 				return Response.status(200).entity("204").build();
 			}
 			
 		} catch (URISyntaxException | SQLException e) {
+			DBManager.close();
 			e.printStackTrace();
 		}
 		return Response.status(200).entity("204").build();// Something going wrong
